@@ -4,79 +4,274 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Memorial Glenda 💚</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #25d366;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── BG com slideshow de fotos ── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+    .bg-photo {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+    .bg-photo.active { opacity: 1; }
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.55) 0%,
+        rgba(0,0,0,0.35) 40%,
+        rgba(0,0,0,0.75) 80%,
+        rgba(0,0,0,0.92) 100%
+      );
+    }
+
+    /* ── Layout ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem 160px;
+      text-align: center;
+    }
+
+    /* ── Nome ── */
+    .memorial-name {
+      font-family: var(--font-serif);
+      font-size: clamp(3.5rem, 12vw, 7rem);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 2px 30px rgba(0,0,0,0.6);
+    }
+
+    .memorial-datas {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+    }
+
+    .memorial-linha {
+      width: 60px;
+      height: 1px;
+      background: var(--green);
+      margin: 0 auto 1.8rem;
+      opacity: 0.8;
+    }
+
+    .memorial-frase {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 3rem;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.5);
+    }
+
+    /* ── Botões ── */
+    .btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+
+    .btn-memorial {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.25s;
+      letter-spacing: 0.02em;
+    }
+    .btn-memorial svg { width: 19px; height: 19px; }
+
+    .btn-chat {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.35);
+    }
+    .btn-chat:hover {
+      background: #1db954;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(37,211,102,0.5);
+    }
+
+    .btn-galeria {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+    }
+    .btn-galeria:hover {
+      background: rgba(255,255,255,0.22);
+      transform: translateY(-2px);
+    }
+
+    /* ── Stats ── */
+    .stats {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* ── Player (idêntico ao player.js) ── */
+    /* Importado via player.css separado */
+  </style>
+  <link rel="stylesheet" href="assets/css/player.css">
 </head>
-<body class="landing">
+<body>
 
-  <div class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <div class="avatar-ring">
-        <!-- Coloque a foto em: assets/media/foto_glenda.jpg -->
-        <img src="assets/media/foto_glenda.jpg"
-             alt="Glenda"
-             class="avatar-photo"
-             onerror="this.style.display='none';document.getElementById('avatar-letter').style.display='flex'">
-        <div class="avatar-placeholder" id="avatar-letter" style="display:none">G</div>
-      </div>
-      <h1 class="hero-name">Glenda</h1>
-      <p class="hero-dates">2019 — 2024</p>
-      <p class="hero-subtitle">Cada mensagem é uma memória que o tempo não apaga.</p>
+  <!-- Background com fotos em slideshow -->
+  <div class="bg">
+    <div class="bg-photo active" id="bg0"></div>
+    <div class="bg-photo" id="bg1"></div>
+    <div class="bg-overlay"></div>
+  </div>
 
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">24.858</span>
-          <span class="stat-label">mensagens</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">1.206</span>
-          <span class="stat-label">fotos</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">3.551</span>
-          <span class="stat-label">áudios</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">40</span>
-          <span class="stat-label">vídeos</span>
-        </div>
-      </div>
+  <div class="page">
+    <h1 class="memorial-name">Glenda</h1>
+    <p class="memorial-datas">Para sempre no coração</p>
+    <div class="memorial-linha"></div>
+    <p class="memorial-frase">
+      "Cada mensagem, cada áudio, cada foto —<br>
+      tudo aqui é amor guardado para não se perder."
+    </p>
 
-      <div class="hero-buttons">
-        <a href="chat.html" class="btn btn-primary">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-          Ver Conversa
-        </a>
-        <a href="galeria.html" class="btn btn-secondary">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-          Galeria de Fotos
-        </a>
-      </div>
+    <div class="btns">
+      <a href="chat.html" class="btn-memorial btn-chat">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        Ver Conversa
+      </a>
+      <a href="galeria.html" class="btn-memorial btn-galeria">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        Galeria de Fotos
+      </a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-num">24.858</span><span class="stat-label">mensagens</span></div>
+      <div class="stat"><span class="stat-num">1.206</span><span class="stat-label">fotos</span></div>
+      <div class="stat"><span class="stat-num">3.551</span><span class="stat-label">áudios</span></div>
+      <div class="stat"><span class="stat-num">40</span><span class="stat-label">vídeos</span></div>
     </div>
   </div>
 
-  <div class="landing-info">
-    <div class="info-card">
-      <div class="info-icon">💬</div>
-      <h3>Conversa completa</h3>
-      <p>Todas as mensagens trocadas entre mãe e filha ao longo de 5 anos, com fotos, áudios e vídeos.</p>
-    </div>
-    <div class="info-card">
-      <div class="info-icon">🎵</div>
-      <h3>Áudios preservados</h3>
-      <p>Mais de 3.500 mensagens de voz que guardam para sempre a lembrança da voz dela.</p>
-    </div>
-    <div class="info-card">
-      <div class="info-icon">📸</div>
-      <h3>Memórias em imagens</h3>
-      <p>Mais de 1.200 fotos e 40 vídeos que contam a história de uma vida.</p>
-    </div>
-  </div>
+  <script>
+    // Slideshow de fotos como background
+    const fotos = [
+      'assets/media/fotos/IMG-20190906-WA0053.jpg',
+      'assets/media/fotos/IMG-20191023-WA0069.jpg',
+      'assets/media/fotos/IMG-20200214-WA0001.jpg',
+      'assets/media/fotos/IMG-20210101-WA0001.jpg',
+      'assets/media/fotos/IMG-20221130-WA0001.jpg',
+    ];
 
-  <footer class="landing-footer">
-    <p>Feito com amor para guardar para sempre cada momento. 💚</p>
-  </footer>
+    // Carrega fotos que existem
+    function loadBg(idx, el) {
+      const img = new Image();
+      img.onload  = () => { el.style.backgroundImage = `url('${fotos[idx]}')`; };
+      img.onerror = () => {
+        // tenta a próxima
+        if (idx + 1 < fotos.length) loadBg(idx + 1, el);
+        else el.style.backgroundImage = "linear-gradient(135deg,#0d1117,#1a2a1a)";
+      };
+      img.src = fotos[idx];
+    }
+
+    // Inicializa com as primeiras fotos da galeria
+    fetch('assets/chat_data.json')
+      .then(r => r.json())
+      .then(data => {
+        const imgs = data.messages.filter(m => m.type === 'image').map(m => m.filename);
+        if (!imgs.length) return;
+        // Pega 6 fotos distribuídas ao longo da conversa
+        const step  = Math.floor(imgs.length / 6);
+        const picks = [0,1,2,3,4,5].map(i => `assets/media/fotos/${imgs[Math.min(i*step, imgs.length-1)]}`);
+        startSlideshow(picks);
+      })
+      .catch(() => {
+        startSlideshow(fotos);
+      });
+
+    function startSlideshow(list) {
+      let cur = 0;
+      const bg0 = document.getElementById('bg0');
+      const bg1 = document.getElementById('bg1');
+
+      bg0.style.backgroundImage = `url('${list[0]}')`;
+      bg0.classList.add('active');
+
+      setInterval(() => {
+        const next = (cur + 1) % list.length;
+        const show = cur % 2 === 0 ? bg1 : bg0;
+        const hide = cur % 2 === 0 ? bg0 : bg1;
+
+        show.style.backgroundImage = `url('${list[next]}')`;
+        show.classList.add('active');
+        setTimeout(() => hide.classList.remove('active'), 2000);
+        cur = next;
+      }, 6000);
+    }
+  </script>
 
   <script src="assets/js/player.js"></script>
 </body>

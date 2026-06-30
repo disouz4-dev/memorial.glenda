@@ -3,66 +3,517 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Fotos — Memorial Glenda 💚</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <title>Fotos — Memorial Glenda</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #25d366;
+      --font: 'Inter', -apple-system, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    .app { display: flex; flex-direction: column; height: 100vh; }
+
+    /* ── Header ── */
+    .header {
+      background: #1c1c1e;
+      border-bottom: 0.5px solid rgba(255,255,255,0.12);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      text-decoration: none;
+      color: var(--green);
+      font-size: 1rem;
+      font-weight: 400;
+      padding: 0.2rem 0;
+    }
+    .back-btn svg { width: 10px; height: 16px; }
+
+    .header-title {
+      flex: 1;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .header-count {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      font-weight: 400;
+    }
+
+    /* ── Tabs tipo iOS ── */
+    .tabs {
+      display: flex;
+      background: #1c1c1e;
+      border-bottom: 0.5px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+    .tab {
+      flex: 1;
+      padding: 0.6rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: rgba(255,255,255,0.4);
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab.active {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+
+    /* ── Scroll area ── */
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: #000;
+      padding-bottom: 120px;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ── Mês ── */
+    .mes-grupo { margin-bottom: 0; }
+
+    .mes-titulo {
+      padding: 1.2rem 1rem 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+    .mes-qtd {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ── Grid 4 colunas como iOS ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5px;
+    }
+    @media (max-width: 400px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .cell {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      background: #1c1c1e;
+    }
+    .cell img, .cell video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .cell:active img, .cell:active video { opacity: 0.7; }
+    .cell:active { transform: scale(0.97); }
+
+    .vid-icon {
+      position: absolute;
+      bottom: 4px;
+      right: 5px;
+      color: #fff;
+    }
+    .vid-icon svg { width: 14px; height: 14px; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.9)); }
+
+    /* ── Lightbox iOS ── */
+    #lb {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 5000;
+      flex-direction: column;
+    }
+    #lb.open { display: flex; }
+
+    .lb-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+    .lb-bar button {
+      background: none;
+      border: none;
+      color: var(--green);
+      font-family: var(--font);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0.2rem 0;
+    }
+    .lb-info { text-align: center; }
+    .lb-info-date { font-size: 0.85rem; color: #fff; font-weight: 500; }
+    .lb-info-num  { font-size: 0.75rem; color: rgba(255,255,255,0.45); margin-top: 1px; }
+
+    .lb-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .lb-main img, .lb-main video {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .lb-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: background 0.15s;
+    }
+    .lb-arrow:hover { background: rgba(255,255,255,0.22); }
+    .lb-arrow.prev { left: 0.6rem; }
+    .lb-arrow.next { right: 0.6rem; }
+
+    /* Tira de thumbnails em baixo */
+    .lb-strip {
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 0;
+      flex-shrink: 0;
+    }
+    .lb-strip-inner {
+      display: flex;
+      gap: 2px;
+      padding: 0 0.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .lb-strip-inner::-webkit-scrollbar { display: none; }
+
+    .lb-thumb {
+      width: 54px;
+      height: 54px;
+      flex-shrink: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      scroll-snap-align: center;
+      border: 2px solid transparent;
+      transition: border-color 0.15s;
+      background: #222;
+    }
+    .lb-thumb.active { border-color: #fff; }
+    .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      gap: 1rem;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.9rem;
+    }
+    .spinner {
+      width: 30px; height: 30px;
+      border: 2px solid rgba(255,255,255,0.1);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+  <link rel="stylesheet" href="assets/css/player.css">
 </head>
-<body class="galeria-page">
+<body>
+<div class="app">
 
-  <!-- Header -->
-  <div class="galeria-header">
+  <div class="header">
     <a href="index.html" class="back-btn">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      Início
     </a>
-    <div style="flex:1">
-      <div style="font-size:1rem;font-weight:700;color:#fff">Memórias</div>
-      <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)" id="galeria-count">carregando...</div>
-    </div>
-    <div class="galeria-views">
-      <button class="view-btn" data-view="anos">Anos</button>
-      <button class="view-btn active" data-view="meses">Meses</button>
-      <button class="view-btn" data-view="todos">Todos</button>
+    <div>
+      <div class="header-title">Memórias</div>
+      <div class="header-count" id="hcount">carregando...</div>
     </div>
   </div>
 
-  <!-- Tabs fotos/vídeos -->
-  <div class="galeria-type-tabs">
-    <button class="type-tab active" data-type="image">Fotos</button>
-    <button class="type-tab" data-type="video">Vídeos</button>
-    <button class="type-tab" data-type="all">Tudo</button>
+  <div class="tabs">
+    <button class="tab active" data-t="image">Fotos</button>
+    <button class="tab" data-t="video">Vídeos</button>
+    <button class="tab" data-t="all">Tudo</button>
   </div>
 
-  <!-- Conteúdo -->
-  <main class="galeria-main" id="galeria-main">
-    <div class="loading-spinner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:50vh;gap:1rem;color:rgba(255,255,255,0.4)">
-      <div class="spinner"></div>
-      <p>Carregando memórias...</p>
-    </div>
-  </main>
-
-  <!-- Lightbox estilo iPhone -->
-  <div class="iphone-lightbox" id="iphone-lb">
-    <div class="lb-top-bar">
-      <button id="lb-close">✕ Fechar</button>
-      <div class="lb-date-info">
-        <strong id="lb-date"></strong>
-        <span id="lb-counter"></span>
-      </div>
-      <button id="lb-download" title="Baixar">⬇</button>
-    </div>
-
-    <div class="lb-media-wrap" id="lb-media-wrap">
-      <button class="lb-nav-btn prev" id="lb-prev">‹</button>
-      <div id="lb-media"></div>
-      <button class="lb-nav-btn next" id="lb-next">›</button>
-    </div>
-
-    <div class="lb-bottom-strip">
-      <div class="lb-strip-scroll" id="lb-strip"></div>
-    </div>
+  <div class="scroll-area" id="scroll">
+    <div class="loading"><div class="spinner"></div><span>Carregando...</span></div>
   </div>
 
-  <script src="assets/js/galeria.js"></script>
-  <script src="assets/js/player.js"></script>
+</div>
+
+<!-- Lightbox -->
+<div id="lb">
+  <div class="lb-bar">
+    <button id="lb-close">Fechar</button>
+    <div class="lb-info">
+      <div class="lb-info-date" id="lb-date"></div>
+      <div class="lb-info-num"  id="lb-num"></div>
+    </div>
+    <button id="lb-dl">⬇ Salvar</button>
+  </div>
+
+  <div class="lb-main" id="lb-main">
+    <button class="lb-arrow prev" id="lb-prev">‹</button>
+    <div id="lb-media"></div>
+    <button class="lb-arrow next" id="lb-next">›</button>
+  </div>
+
+  <div class="lb-strip">
+    <div class="lb-strip-inner" id="lb-strip"></div>
+  </div>
+</div>
+
+<script>
+const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const BASE_F = 'assets/media/fotos/';
+const BASE_V = 'assets/media/videos/';
+
+let all = [], shown = [], lbIdx = 0, curType = 'image';
+let stripBuilt = false;
+
+fetch('assets/chat_data.json')
+  .then(r => r.json())
+  .then(d => {
+    all = d.messages
+      .filter(m => m.type === 'image' || m.type === 'video')
+      .sort((a, b) => {
+        const ts = m => { const [dd,mm,yy] = m.date.split('/'); return new Date(`${yy}-${mm}-${dd}T${m.time}`).getTime(); };
+        return ts(a) - ts(b);
+      });
+    updateCount();
+    apply();
+  });
+
+function updateCount() {
+  const f = all.filter(m => m.type==='image').length;
+  const v = all.filter(m => m.type==='video').length;
+  document.getElementById('hcount').textContent = `${f.toLocaleString('pt-BR')} fotos · ${v} vídeos`;
+}
+
+function apply() {
+  shown = curType === 'all' ? all : all.filter(m => m.type === curType);
+  stripBuilt = false;
+  render();
+}
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    curType = btn.dataset.t;
+    apply();
+  });
+});
+
+// ── Render ──────────────────────────────────────────────
+function render() {
+  const scroll = document.getElementById('scroll');
+  scroll.innerHTML = '';
+
+  if (!shown.length) {
+    scroll.innerHTML = '<p style="text-align:center;padding:3rem;color:rgba(255,255,255,0.3)">Nenhum item.</p>';
+    return;
+  }
+
+  // Agrupa por mês
+  const groups = {};
+  shown.forEach((m, i) => {
+    const [d, mo, y] = m.date.split('/');
+    const key = `${y}-${mo.padStart(2,'0')}`;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push({ m, i });
+  });
+
+  Object.keys(groups).sort().forEach(key => {
+    const [y, mo] = key.split('-');
+    const label   = `${MONTHS[+mo-1]} de ${y}`;
+    const items   = groups[key];
+
+    const grupo = document.createElement('div');
+    grupo.className = 'mes-grupo';
+
+    const titulo = document.createElement('div');
+    titulo.className = 'mes-titulo';
+    titulo.innerHTML = `${label} <span class="mes-qtd">${items.length}</span>`;
+    grupo.appendChild(titulo);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    items.forEach(({ m, i }) => grid.appendChild(makeCell(m, i)));
+    grupo.appendChild(grid);
+
+    scroll.appendChild(grupo);
+  });
+}
+
+function makeCell(m, idx) {
+  const cell = document.createElement('div');
+  cell.className = 'cell';
+
+  const src = m.type === 'video' ? `${BASE_V}${m.filename}` : `${BASE_F}${m.filename}`;
+
+  if (m.type === 'video') {
+    const v = document.createElement('video');
+    v.src = src; v.preload = 'metadata';
+    v.onerror = () => cell.style.display = 'none';
+    cell.appendChild(v);
+    const ico = document.createElement('div');
+    ico.className = 'vid-icon';
+    ico.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+    cell.appendChild(ico);
+  } else {
+    const img = document.createElement('img');
+    img.src = src; img.loading = 'lazy';
+    img.onerror = () => cell.style.display = 'none';
+    cell.appendChild(img);
+  }
+
+  cell.addEventListener('click', () => openLb(idx));
+  return cell;
+}
+
+// ── Lightbox ─────────────────────────────────────────────
+function openLb(idx) {
+  lbIdx = idx;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (!stripBuilt) buildStrip();
+  showMedia();
+}
+
+function closeLb() {
+  const vid = document.querySelector('#lb-media video');
+  if (vid) vid.pause();
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showMedia() {
+  const m   = shown[lbIdx];
+  const src = m.type === 'video' ? `${BASE_V}${m.filename}` : `${BASE_F}${m.filename}`;
+  const el  = document.getElementById('lb-media');
+
+  const prevVid = el.querySelector('video');
+  if (prevVid) prevVid.pause();
+
+  if (m.type === 'video') {
+    el.innerHTML = `<video src="${src}" controls autoplay playsinline style="max-width:100vw;max-height:75vh"></video>`;
+  } else {
+    el.innerHTML = `<img src="${src}" style="max-width:100vw;max-height:75vh;object-fit:contain">`;
+  }
+
+  const [d, mo, y] = m.date.split('/');
+  document.getElementById('lb-date').textContent = `${d} de ${MONTHS[+mo-1]} de ${y}`;
+  document.getElementById('lb-num').textContent  = `${lbIdx + 1} de ${shown.length}`;
+
+  document.getElementById('lb-dl').onclick = () => {
+    const a = Object.assign(document.createElement('a'), { href: src, download: m.filename });
+    a.click();
+  };
+
+  // Thumb ativo
+  const thumbs = document.querySelectorAll('.lb-thumb');
+  thumbs.forEach((t, i) => t.classList.toggle('active', i === lbIdx));
+  const active = thumbs[lbIdx];
+  if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+function buildStrip() {
+  const strip = document.getElementById('lb-strip');
+  strip.innerHTML = '';
+  shown.forEach((m, i) => {
+    const src = m.type === 'video' ? `${BASE_V}${m.filename}` : `${BASE_F}${m.filename}`;
+    const t = document.createElement('div');
+    t.className = 'lb-thumb' + (i === lbIdx ? ' active' : '');
+    t.innerHTML = `<img src="${src}" loading="lazy">`;
+    t.addEventListener('click', () => { lbIdx = i; showMedia(); });
+    strip.appendChild(t);
+  });
+  stripBuilt = true;
+}
+
+function go(dir) {
+  const vid = document.querySelector('#lb-media video');
+  if (vid) vid.pause();
+  lbIdx = (lbIdx + dir + shown.length) % shown.length;
+  showMedia();
+}
+
+document.getElementById('lb-close').addEventListener('click', closeLb);
+document.getElementById('lb-prev').addEventListener('click', () => go(-1));
+document.getElementById('lb-next').addEventListener('click', () => go(+1));
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lb').classList.contains('open')) return;
+  if (e.key === 'Escape')     closeLb();
+  if (e.key === 'ArrowLeft')  go(-1);
+  if (e.key === 'ArrowRight') go(+1);
+});
+
+// Swipe
+let tx = 0;
+document.getElementById('lb-main').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+document.getElementById('lb-main').addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+});
+</script>
+
+<script src="assets/js/player.js"></script>
 </body>
 </html>
