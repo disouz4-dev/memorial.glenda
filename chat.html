@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversa com Glenda 💚</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="chat-page">
+
+  <!-- Header estilo WhatsApp -->
+  <header class="wa-header">
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    </a>
+    <div class="wa-header-avatar">G</div>
+    <div class="wa-header-info">
+      <div class="wa-header-name">Glenda 💚</div>
+      <div class="wa-header-sub" id="chat-info">carregando...</div>
+    </div>
+    <div class="wa-header-actions">
+      <a href="galeria.html" title="Galeria">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Barra de busca -->
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <input type="text" id="search-input" placeholder="Buscar mensagens..." />
+    <button id="search-clear" style="display:none">✕</button>
+  </div>
+
+  <!-- Filtro por data -->
+  <div class="date-filter">
+    <span class="filter-label">Ir para:</span>
+    <select id="year-filter">
+      <option value="">Todos os anos</option>
+      <option value="2019">2019</option>
+      <option value="2020">2020</option>
+      <option value="2021">2021</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+    </select>
+  </div>
+
+  <!-- Área de mensagens -->
+  <main class="chat-area" id="chat-area">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Carregando memórias...</p>
+    </div>
+  </main>
+
+  <!-- Lightbox para fotos/vídeos -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lb-close">✕</button>
+    <div class="lightbox-content" id="lb-content"></div>
+  </div>
+
+  <script src="assets/js/chat.js"></script>
+</body>
+</html>

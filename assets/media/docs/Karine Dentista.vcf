@@ -1,0 +1,7 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Dentista;Karine;;;
+FN:Karine Dentista
+item1.TEL;waid=5521988914454:+55 21 98891-4454
+item1.X-ABLabel:Celular
+END:VCARD

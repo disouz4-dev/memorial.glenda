@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:;Marcos Motorista ;;;
+FN:Marcos Motorista 
+TEL;type=CELL;type=VOICE;waid=5521970270749:+55 21 97027-0749
+END:VCARDBEGIN:VCARD
+VERSION:3.0
+N:;Norberto Motorista ;;;
+FN:Norberto Motorista 
+TEL;type=CELL;type=VOICE;waid=5521971137840:+55 21 97113-7840
+END:VCARD
