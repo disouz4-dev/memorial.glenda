@@ -2,47 +2,67 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galeria — Memorial Glenda 💚</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Fotos — Memorial Glenda 💚</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="galeria-page">
 
-  <header class="wa-header">
+  <!-- Header -->
+  <div class="galeria-header">
     <a href="index.html" class="back-btn">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     </a>
-    <div class="wa-header-avatar">G</div>
-    <div class="wa-header-info">
-      <div class="wa-header-name">Galeria de Memórias</div>
-      <div class="wa-header-sub" id="galeria-count">carregando...</div>
+    <div style="flex:1">
+      <div style="font-size:1rem;font-weight:700;color:#fff">Memórias</div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)" id="galeria-count">carregando...</div>
     </div>
-  </header>
-
-  <div class="galeria-tabs">
-    <button class="tab-btn active" data-tab="fotos">📸 Fotos</button>
-    <button class="tab-btn" data-tab="videos">🎬 Vídeos</button>
+    <div class="galeria-views">
+      <button class="view-btn" data-view="anos">Anos</button>
+      <button class="view-btn active" data-view="meses">Meses</button>
+      <button class="view-btn" data-view="todos">Todos</button>
+    </div>
   </div>
 
-  <main class="galeria-grid" id="galeria-grid">
-    <div class="loading-spinner">
+  <!-- Tabs fotos/vídeos -->
+  <div class="galeria-type-tabs">
+    <button class="type-tab active" data-type="image">Fotos</button>
+    <button class="type-tab" data-type="video">Vídeos</button>
+    <button class="type-tab" data-type="all">Tudo</button>
+  </div>
+
+  <!-- Conteúdo -->
+  <main class="galeria-main" id="galeria-main">
+    <div class="loading-spinner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:50vh;gap:1rem;color:rgba(255,255,255,0.4)">
       <div class="spinner"></div>
-      <p>Carregando galeria...</p>
+      <p>Carregando memórias...</p>
     </div>
   </main>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lb-close">✕</button>
-    <div class="lightbox-nav">
-      <button id="lb-prev">‹</button>
-      <div class="lightbox-content" id="lb-content"></div>
-      <button id="lb-next">›</button>
+  <!-- Lightbox estilo iPhone -->
+  <div class="iphone-lightbox" id="iphone-lb">
+    <div class="lb-top-bar">
+      <button id="lb-close">✕ Fechar</button>
+      <div class="lb-date-info">
+        <strong id="lb-date"></strong>
+        <span id="lb-counter"></span>
+      </div>
+      <button id="lb-download" title="Baixar">⬇</button>
     </div>
-    <div class="lightbox-caption" id="lb-caption"></div>
+
+    <div class="lb-media-wrap" id="lb-media-wrap">
+      <button class="lb-nav-btn prev" id="lb-prev">‹</button>
+      <div id="lb-media"></div>
+      <button class="lb-nav-btn next" id="lb-next">›</button>
+    </div>
+
+    <div class="lb-bottom-strip">
+      <div class="lb-strip-scroll" id="lb-strip"></div>
+    </div>
   </div>
 
   <script src="assets/js/galeria.js"></script>
+  <script src="assets/js/player.js"></script>
 </body>
 </html>

@@ -2,11 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Memorial Glenda 💚</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="landing">
 
@@ -14,7 +13,12 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="avatar-ring">
-        <div class="avatar-placeholder">G</div>
+        <!-- Coloque a foto em: assets/media/foto_glenda.jpg -->
+        <img src="assets/media/foto_glenda.jpg"
+             alt="Glenda"
+             class="avatar-photo"
+             onerror="this.style.display='none';document.getElementById('avatar-letter').style.display='flex'">
+        <div class="avatar-placeholder" id="avatar-letter" style="display:none">G</div>
       </div>
       <h1 class="hero-name">Glenda</h1>
       <p class="hero-dates">2019 — 2024</p>
@@ -22,7 +26,7 @@
 
       <div class="hero-stats">
         <div class="stat">
-          <span class="stat-num" id="stat-msg">24.858</span>
+          <span class="stat-num">24.858</span>
           <span class="stat-label">mensagens</span>
         </div>
         <div class="stat">
@@ -61,7 +65,7 @@
     <div class="info-card">
       <div class="info-icon">🎵</div>
       <h3>Áudios preservados</h3>
-      <p>Mais de 3.500 mensagens de voz que guardam a lembrança da voz dela.</p>
+      <p>Mais de 3.500 mensagens de voz que guardam para sempre a lembrança da voz dela.</p>
     </div>
     <div class="info-card">
       <div class="info-icon">📸</div>
@@ -74,5 +78,6 @@
     <p>Feito com amor para guardar para sempre cada momento. 💚</p>
   </footer>
 
+  <script src="assets/js/player.js"></script>
 </body>
 </html>
