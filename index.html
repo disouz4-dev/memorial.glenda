@@ -216,55 +216,34 @@
   </div>
 
   <script>
-    // Slideshow de fotos como background
-    const fotos = [
-      'assets/media/fotos/IMG-20190906-WA0053.jpg',
-      'assets/media/fotos/IMG-20191023-WA0069.jpg',
-      'assets/media/fotos/IMG-20200214-WA0001.jpg',
-      'assets/media/fotos/IMG-20210101-WA0001.jpg',
-      'assets/media/fotos/IMG-20221130-WA0001.jpg',
-    ];
+    // Slideshow usando SOMENTE fotos da pasta fotos_capa/
+    // Coloque as fotos da Glenda em: assets/media/fotos_capa/
+    const CAPA_BASE = 'assets/media/fotos_capa/';
 
-    // Carrega fotos que existem
-    function loadBg(idx, el) {
-      const img = new Image();
-      img.onload  = () => { el.style.backgroundImage = `url('${fotos[idx]}')`; };
-      img.onerror = () => {
-        // tenta a próxima
-        if (idx + 1 < fotos.length) loadBg(idx + 1, el);
-        else el.style.backgroundImage = "linear-gradient(135deg,#0d1117,#1a2a1a)";
-      };
-      img.src = fotos[idx];
-    }
-
-    // Inicializa com as primeiras fotos da galeria
-    fetch('assets/chat_data.json')
+    fetch('assets/fotos_capa.json')
       .then(r => r.json())
-      .then(data => {
-        const imgs = data.messages.filter(m => m.type === 'image').map(m => m.filename);
-        if (!imgs.length) return;
-        // Pega 6 fotos distribuídas ao longo da conversa
-        const step  = Math.floor(imgs.length / 6);
-        const picks = [0,1,2,3,4,5].map(i => `assets/media/fotos/${imgs[Math.min(i*step, imgs.length-1)]}`);
-        startSlideshow(picks);
+      .then(lista => {
+        if (!lista || !lista.length) return; // pasta vazia — mantém fundo escuro
+        startSlideshow(lista.map(f => CAPA_BASE + f));
       })
       .catch(() => {
-        startSlideshow(fotos);
+        // arquivo não existe ainda — fundo escuro apenas
       });
 
     function startSlideshow(list) {
+      if (!list.length) return;
       let cur = 0;
       const bg0 = document.getElementById('bg0');
       const bg1 = document.getElementById('bg1');
 
       bg0.style.backgroundImage = `url('${list[0]}')`;
       bg0.classList.add('active');
+      if (list.length === 1) return;
 
       setInterval(() => {
         const next = (cur + 1) % list.length;
         const show = cur % 2 === 0 ? bg1 : bg0;
         const hide = cur % 2 === 0 ? bg0 : bg1;
-
         show.style.backgroundImage = `url('${list[next]}')`;
         show.classList.add('active');
         setTimeout(() => hide.classList.remove('active'), 2000);
