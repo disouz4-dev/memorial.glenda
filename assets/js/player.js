@@ -12,6 +12,10 @@ const PLAYLIST = [
   { title: "Break Free",                artist: "Ariana Grande",      file: "Zedd feat Ariana Grande - Break Free - [9cb34e].mp3" },
   { title: "Into You",                  artist: "Ariana Grande",      file: "Ariana Grande - Into You.mp3" },
   { title: "As It Was",                 artist: "Harry Styles",       file: "Harry Styles - As It Was.mp3" },
+  { title: "Watermelon Sugar",          artist: "Harry Styles",       file: "Harry Styles - Watermelon Sugar.mp3" },
+  { title: "Adore You",                 artist: "Harry Styles",       file: "Harry Styles - Adore You.mp3" },
+  { title: "Golden",                    artist: "Harry Styles",       file: "Harry Styles - Golden.mp3" },
+  { title: "Sign of the Times",         artist: "Harry Styles",       file: "Harry Styles - Sign of the Times.mp3" },
 ];
 
 const MEDIA_BASE = 'assets/media/musicas/';
