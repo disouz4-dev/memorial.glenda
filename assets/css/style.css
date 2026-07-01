@@ -1187,3 +1187,12 @@ body.galeria-page { padding-bottom: 0; }
   object-fit: cover;
   display: block;
 }
+
+/* Foto de perfil no header do chat */
+.wa-header-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
