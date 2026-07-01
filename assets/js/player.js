@@ -64,7 +64,7 @@ function loadTrack(idx, autoplay) {
   currentIdx  = idx;
   const track = PLAYLIST[idx];
   audio.src   = MEDIA_BASE + encodeURIComponent(track.file);
-  audio.volume = parseFloat(document.getElementById('mp-vol')?.value ?? 0.5);
+  audio.volume = parseFloat(document.getElementById('mp-vol')?.value ?? 0.7);
   updateUI();
   if (autoplay) audio.play().catch(() => {});
   saveState();
@@ -169,13 +169,13 @@ function injectPlayer() {
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
         </button>
         <button class="mp-btn mp-shuffle${shuffleOn ? ' on' : ''}" id="mp-shuffle" title="Aleatório">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.79 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
         </button>
       </div>
 
       <div class="mp-vol-wrap">
         <svg viewBox="0 0 24 24" fill="currentColor" class="mp-vol-icon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-        <input type="range" id="mp-vol" min="0" max="1" step="0.01" value="0.5">
+        <input type="range" id="mp-vol" min="0" max="1" step="0.01" value="0.7">
       </div>
     </div>
 
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const startIdx = shuffleOn ? shuffleOrder[0] : currentIdx;
   loadTrack(startIdx, false);
-  audio.volume = 0.5;
+  audio.volume = 0.7;
 
   // Tenta autoplay após carregar o áudio
   audio.addEventListener('canplay', tryAutoplay, { once: true });
