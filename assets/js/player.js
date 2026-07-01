@@ -5,7 +5,7 @@ const PLAYLIST = [
   { title: "Treat You Better",          artist: "Shawn Mendes",       file: "Shawn Mendes - Treat You Better.mp3" },
   { title: "Nothing Holding Me Back",   artist: "Shawn Mendes",       file: "Shawn Mendes - Nothing Holding Me.mp3" },
   { title: "In My Blood",               artist: "Shawn Mendes",       file: "Shawn Mendes - In My Blood.mp3" },
-  { title: "Mercy",                     artist: "Shawn Mendes",       file: "Shawn Mendes - Mercy.m4a" },
+  { title: "Mercy",                     artist: "Shawn Mendes",       file: "Shawn Mendes - Mercy.mp3" },
   { title: "Thank U, Next",             artist: "Ariana Grande",      file: "Ariana Grande - Thank U, Next.mp3" },
   { title: "7 Rings",                   artist: "Ariana Grande",      file: "Ariana Grande - 7 Rings.mp3" },
   { title: "Problem",                   artist: "Ariana Grande",      file: "Ariana Grande - Problem .mp3" },
