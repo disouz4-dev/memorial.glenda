@@ -25,7 +25,6 @@
       background: #111;
     }
 
-    /* Um slide = camada de blur + foto real */
     .slide {
       position: absolute;
       inset: 0;
@@ -34,75 +33,26 @@
     }
     .slide.ativo { opacity: 1; }
 
-    /* Camada 1: foto embaçada cobre tudo — mesmo brilho da foto real */
-    .slide-blur {
-      position: absolute;
-      inset: -6%;
-      background-size: cover;
-      background-position: center top;
-      filter: blur(45px) brightness(0.75) saturate(1.3);
-    }
-
-    /* Camada 2: foto real centrada, SEM esticar */
+    /* Foto já em 1920×1080 — cobre tudo sem truques */
     .slide-foto {
       position: absolute;
       inset: 0;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      overflow: hidden;
     }
     .slide-foto img {
-      height: 100%;
-      width: auto;
-      max-width: 100%;
-      display: block;
-      flex-shrink: 0;
-      /* Máscara: desfaz as bordas esquerda/direita da foto no blur — cria continuidade */
-      -webkit-mask-image: linear-gradient(
-        to right,
-        transparent  0%,
-        black       10%,
-        black       90%,
-        transparent 100%
-      );
-      mask-image: linear-gradient(
-        to right,
-        transparent  0%,
-        black       10%,
-        black       90%,
-        transparent 100%
-      );
-    }
-    .slide-foto img.landscape {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Landscape: desfaz bordas em cima e embaixo */
-      -webkit-mask-image: linear-gradient(
-        to bottom,
-        transparent  0%,
-        black        8%,
-        black       85%,
-        transparent 100%
-      );
-      mask-image: linear-gradient(
-        to bottom,
-        transparent  0%,
-        black        8%,
-        black       85%,
-        transparent 100%
-      );
+      display: block;
     }
 
-    /* Camada 3: gradiente escuro só no rodapé para o texto */
+    /* Gradiente escuro no rodapé para legibilidade do texto */
     .slide-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.0)  0%,
-        rgba(0,0,0,0.0)  45%,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.0)  35%,
         rgba(0,0,0,0.65) 72%,
         rgba(0,0,0,0.93) 100%
       );
@@ -205,7 +155,7 @@
   <!-- Conteúdo -->
   <div class="page">
     <h1 class="nome">Glenda</h1>
-    <p class="subtitulo">Para sempre no coração</p>
+    <p class="subtitulo">Para sempre em nossos corações</p>
     <div class="linha"></div>
     <p class="frase">
       "Cada mensagem, cada áudio, cada foto —<br>
@@ -234,46 +184,24 @@
     .then(r => r.json())
     .then(lista => {
       if (!lista.length) return;
-      const bg  = document.getElementById('bg');
-      const BASE = 'assets/media/fotos_capa/';
+      const bg   = document.getElementById('bg');
+      const BASE = 'assets/media/fotos_wide/';
 
-      // Cria slides
       const slides = lista.map(item => {
         const div = document.createElement('div');
         div.className = 'slide';
 
-        // Blur de fundo (preenche laterais)
-        const blur = document.createElement('div');
-        blur.className = 'slide-blur';
-        blur.style.backgroundImage = `url('${BASE}${item.file}')`;
-        div.appendChild(blur);
-
-        // Foto real sem esticar
         const fotoWrap = document.createElement('div');
         fotoWrap.className = 'slide-foto';
 
         const img = document.createElement('img');
         img.src = `${BASE}${item.file}`;
         img.alt = 'Glenda';
-        // Posiciona verticalmente para o rosto aparecer
-        const faceY = item.face_y ?? 30;
-        if (item.orient === 'vertical') {
-          // Portrait: altura cheia, blur preenche as laterais
-          // object-position não se aplica aqui (height:100%; width:auto)
-          // Ajustamos o align-items do wrapper para mostrar o rosto
-          const topOffset = Math.max(0, faceY - 30); // mostra um pouco acima do rosto
-          fotoWrap.style.alignItems = topOffset > 5 ? 'flex-start' : 'flex-start';
-          img.style.marginTop = `-${topOffset * 0.3}%`;
-        } else {
-          // Square/landscape: cobre tela, posiciona no rosto
-          img.classList.add('landscape');
-          img.style.objectPosition = `center ${faceY}%`;
-        }
+        img.style.objectPosition = `center ${item.face_y ?? 30}%`;
 
         fotoWrap.appendChild(img);
         div.appendChild(fotoWrap);
 
-        // Overlay gradiente
         const ov = document.createElement('div');
         ov.className = 'slide-overlay';
         div.appendChild(ov);
@@ -282,7 +210,6 @@
         return div;
       });
 
-      // Slideshow
       let cur = 0;
       slides[0].classList.add('ativo');
 

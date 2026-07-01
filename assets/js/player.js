@@ -64,7 +64,7 @@ function loadTrack(idx, autoplay) {
   currentIdx  = idx;
   const track = PLAYLIST[idx];
   audio.src   = MEDIA_BASE + encodeURIComponent(track.file);
-  audio.volume = parseFloat(document.getElementById('mp-vol')?.value ?? 0.2);
+  audio.volume = parseFloat(document.getElementById('mp-vol')?.value ?? 0.5);
   updateUI();
   if (autoplay) audio.play().catch(() => {});
   saveState();
@@ -175,7 +175,7 @@ function injectPlayer() {
 
       <div class="mp-vol-wrap">
         <svg viewBox="0 0 24 24" fill="currentColor" class="mp-vol-icon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-        <input type="range" id="mp-vol" min="0" max="1" step="0.01" value="0.2">
+        <input type="range" id="mp-vol" min="0" max="1" step="0.01" value="0.5">
       </div>
     </div>
 
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const startIdx = shuffleOn ? shuffleOrder[0] : currentIdx;
   loadTrack(startIdx, false);
-  audio.volume = 0.2;
+  audio.volume = 0.5;
 
   // Tenta autoplay após carregar o áudio
   audio.addEventListener('canplay', tryAutoplay, { once: true });
