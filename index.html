@@ -589,11 +589,12 @@ window.addEventListener('hashchange', () => {
   navegar(id);
 });
 
-// Inicia na view correta no carregamento
-(function() {
+// Inicia na view correta — via DOMContentLoaded para garantir
+// que initChat/initGaleria já estão definidos (scripts posteriores)
+document.addEventListener('DOMContentLoaded', () => {
   const id = location.hash.replace('#', '') || 'home';
   navegar(id);
-})();
+});
 </script>
 
 <!-- ═══════════════════════════════════════════════
