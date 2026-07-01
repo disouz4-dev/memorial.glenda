@@ -11,245 +11,262 @@
 
     :root {
       --green: #25d366;
-      --font-serif: 'Playfair Display', Georgia, serif;
-      --font-sans: 'Inter', -apple-system, sans-serif;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans:  'Inter', -apple-system, sans-serif;
     }
 
-    html, body {
-      height: 100%;
-      background: #000;
-      color: #fff;
-      font-family: var(--font-sans);
-      -webkit-font-smoothing: antialiased;
-    }
+    html, body { height: 100%; background: #000; color: #fff; font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-    /* ── BG com slideshow de fotos ── */
+    /* ── Slideshow de fundo ─────────────────── */
     .bg {
       position: fixed;
       inset: 0;
       z-index: 0;
+      background: #111;
     }
-    .bg-photo {
+
+    /* Um slide = camada de blur + foto real */
+    .slide {
       position: absolute;
       inset: 0;
-      background-size: cover;
-      background-position: center;
       opacity: 0;
-      transition: opacity 2s ease;
+      transition: opacity 1.8s ease;
     }
-    .bg-photo.active { opacity: 1; }
-    .bg-overlay {
+    .slide.ativo { opacity: 1; }
+
+    /* Camada 1: foto embaçada cobre tudo (preenche as laterais) */
+    .slide-blur {
+      position: absolute;
+      inset: -6%;           /* expande para esconder borda do blur */
+      background-size: cover;
+      background-position: center top;
+      filter: blur(40px) brightness(0.35) saturate(1.4);
+    }
+
+    /* Camada 2: foto real centrada, SEM esticar */
+    .slide-foto {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-start;   /* rosto no topo */
+      justify-content: center;
+      overflow: hidden;
+    }
+    .slide-foto img {
+      /* Vertical: ocupa altura toda, largura natural → blur preenche lados */
+      height: 100%;
+      width: auto;
+      max-width: 100%;
+      display: block;
+      flex-shrink: 0;
+    }
+    /* Fotos quadradas/landscape: cobre tela com object-fit cover posicionado no rosto */
+    .slide-foto img.landscape {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Camada 3: gradiente para o texto ser legível embaixo */
+    .slide-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.55) 0%,
-        rgba(0,0,0,0.35) 40%,
-        rgba(0,0,0,0.75) 80%,
+        rgba(0,0,0,0.15) 0%,
+        rgba(0,0,0,0.0)  25%,
+        rgba(0,0,0,0.55) 65%,
         rgba(0,0,0,0.92) 100%
       );
     }
 
-    /* ── Layout ── */
+    /* ── Conteúdo ───────────────────────────── */
     .page {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 2rem 1.5rem 160px;
+      justify-content: flex-end;
+      padding: 0 1.5rem max(160px, calc(130px + env(safe-area-inset-bottom)));
       text-align: center;
+      padding-top: 60px;
     }
 
-    /* ── Nome ── */
-    .memorial-name {
-      font-family: var(--font-serif);
-      font-size: clamp(3.5rem, 12vw, 7rem);
+    .nome {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 12vw, 6rem);
       font-weight: 400;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: #fff;
       line-height: 1;
-      margin-bottom: 0.6rem;
-      text-shadow: 0 2px 30px rgba(0,0,0,0.6);
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 30px rgba(0,0,0,0.7);
     }
-
-    .memorial-datas {
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
+    .subtitulo {
+      font-size: 0.85rem;
       font-weight: 300;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.28em;
       color: rgba(255,255,255,0.6);
       text-transform: uppercase;
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.4rem;
     }
-
-    .memorial-linha {
-      width: 60px;
+    .linha {
+      width: 48px;
       height: 1px;
       background: var(--green);
-      margin: 0 auto 1.8rem;
-      opacity: 0.8;
+      margin: 0 auto 1.4rem;
+      opacity: 0.9;
     }
-
-    .memorial-frase {
-      font-family: var(--font-serif);
+    .frase {
+      font-family: var(--serif);
       font-style: italic;
-      font-size: clamp(1rem, 3vw, 1.35rem);
-      color: rgba(255,255,255,0.85);
-      line-height: 1.7;
-      max-width: 480px;
-      margin-bottom: 3rem;
-      text-shadow: 0 1px 10px rgba(0,0,0,0.5);
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      color: rgba(255,255,255,0.82);
+      line-height: 1.75;
+      max-width: 440px;
+      margin-bottom: 2.2rem;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.6);
     }
 
-    /* ── Botões ── */
-    .btns {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 3.5rem;
-    }
+    /* ── Botões ─────────────────────────────── */
+    .btns { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
 
-    .btn-memorial {
+    .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 0.9rem 2rem;
+      gap: 0.55rem;
+      padding: 0.85rem 1.8rem;
       border-radius: 50px;
       text-decoration: none;
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
+      font-family: var(--sans);
+      font-size: 0.92rem;
       font-weight: 500;
-      transition: all 0.25s;
+      transition: all 0.22s;
       letter-spacing: 0.02em;
     }
-    .btn-memorial svg { width: 19px; height: 19px; }
-
-    .btn-chat {
+    .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .btn-green {
       background: var(--green);
       color: #fff;
-      box-shadow: 0 4px 24px rgba(37,211,102,0.35);
+      box-shadow: 0 4px 22px rgba(37,211,102,0.4);
     }
-    .btn-chat:hover {
-      background: #1db954;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(37,211,102,0.5);
-    }
-
-    .btn-galeria {
-      background: rgba(255,255,255,0.12);
+    .btn-green:hover { background: #1db954; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.5); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.1);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.22);
       backdrop-filter: blur(8px);
     }
-    .btn-galeria:hover {
-      background: rgba(255,255,255,0.22);
-      transform: translateY(-2px);
-    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
-    /* ── Stats ── */
-    .stats {
-      display: flex;
-      gap: 2.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    /* ── Stats ──────────────────────────────── */
+    .stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding-bottom: 0.5rem; }
     .stat { text-align: center; }
-    .stat-num {
-      display: block;
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--green);
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-    .stat-label {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.45);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    /* ── Player (idêntico ao player.js) ── */
-    /* Importado via player.css separado */
+    .stat-n { display: block; font-size: 1.4rem; font-weight: 600; color: var(--green); line-height: 1; }
+    .stat-l { font-size: 0.7rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.5px; }
   </style>
   <link rel="stylesheet" href="assets/css/player.css">
 </head>
 <body>
 
-  <!-- Background com fotos em slideshow -->
-  <div class="bg">
-    <div class="bg-photo active" id="bg0"></div>
-    <div class="bg-photo" id="bg1"></div>
-    <div class="bg-overlay"></div>
-  </div>
+  <!-- Background slideshow -->
+  <div class="bg" id="bg"></div>
 
+  <!-- Conteúdo -->
   <div class="page">
-    <h1 class="memorial-name">Glenda</h1>
-    <p class="memorial-datas">Para sempre no coração</p>
-    <div class="memorial-linha"></div>
-    <p class="memorial-frase">
+    <h1 class="nome">Glenda</h1>
+    <p class="subtitulo">Para sempre no coração</p>
+    <div class="linha"></div>
+    <p class="frase">
       "Cada mensagem, cada áudio, cada foto —<br>
       tudo aqui é amor guardado para não se perder."
     </p>
-
     <div class="btns">
-      <a href="chat.html" class="btn-memorial btn-chat">
+      <a href="chat.html" class="btn btn-green">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         Ver Conversa
       </a>
-      <a href="galeria.html" class="btn-memorial btn-galeria">
+      <a href="galeria.html" class="btn btn-ghost">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
         Galeria de Fotos
       </a>
     </div>
-
     <div class="stats">
-      <div class="stat"><span class="stat-num">24.858</span><span class="stat-label">mensagens</span></div>
-      <div class="stat"><span class="stat-num">1.206</span><span class="stat-label">fotos</span></div>
-      <div class="stat"><span class="stat-num">3.551</span><span class="stat-label">áudios</span></div>
-      <div class="stat"><span class="stat-num">40</span><span class="stat-label">vídeos</span></div>
+      <div class="stat"><span class="stat-n">24.858</span><span class="stat-l">mensagens</span></div>
+      <div class="stat"><span class="stat-n">1.206</span><span class="stat-l">fotos</span></div>
+      <div class="stat"><span class="stat-n">3.551</span><span class="stat-l">áudios</span></div>
+      <div class="stat"><span class="stat-n">40</span><span class="stat-l">vídeos</span></div>
     </div>
   </div>
 
   <script>
-    // Slideshow usando SOMENTE fotos da pasta fotos_capa/
-    // Coloque as fotos da Glenda em: assets/media/fotos_capa/
-    const CAPA_BASE = 'assets/media/fotos_capa/';
+  fetch('assets/fotos_capa.json')
+    .then(r => r.json())
+    .then(lista => {
+      if (!lista.length) return;
+      const bg  = document.getElementById('bg');
+      const BASE = 'assets/media/fotos_capa/';
 
-    fetch('assets/fotos_capa.json')
-      .then(r => r.json())
-      .then(lista => {
-        if (!lista || !lista.length) return; // pasta vazia — mantém fundo escuro
-        startSlideshow(lista.map(f => CAPA_BASE + f));
-      })
-      .catch(() => {
-        // arquivo não existe ainda — fundo escuro apenas
+      // Cria slides
+      const slides = lista.map(item => {
+        const div = document.createElement('div');
+        div.className = 'slide';
+
+        // Blur de fundo (preenche laterais)
+        const blur = document.createElement('div');
+        blur.className = 'slide-blur';
+        blur.style.backgroundImage = `url('${BASE}${item.file}')`;
+        div.appendChild(blur);
+
+        // Foto real sem esticar
+        const fotoWrap = document.createElement('div');
+        fotoWrap.className = 'slide-foto';
+
+        const img = document.createElement('img');
+        img.src = `${BASE}${item.file}`;
+        img.alt = 'Glenda';
+        // Posiciona verticalmente para o rosto aparecer
+        const faceY = item.face_y ?? 30;
+        if (item.orient === 'vertical') {
+          // Portrait: altura cheia, blur preenche as laterais
+          // object-position não se aplica aqui (height:100%; width:auto)
+          // Ajustamos o align-items do wrapper para mostrar o rosto
+          const topOffset = Math.max(0, faceY - 30); // mostra um pouco acima do rosto
+          fotoWrap.style.alignItems = topOffset > 5 ? 'flex-start' : 'flex-start';
+          img.style.marginTop = `-${topOffset * 0.3}%`;
+        } else {
+          // Square/landscape: cobre tela, posiciona no rosto
+          img.classList.add('landscape');
+          img.style.objectPosition = `center ${faceY}%`;
+        }
+
+        fotoWrap.appendChild(img);
+        div.appendChild(fotoWrap);
+
+        // Overlay gradiente
+        const ov = document.createElement('div');
+        ov.className = 'slide-overlay';
+        div.appendChild(ov);
+
+        bg.appendChild(div);
+        return div;
       });
 
-    function startSlideshow(list) {
-      if (!list.length) return;
+      // Slideshow
       let cur = 0;
-      const bg0 = document.getElementById('bg0');
-      const bg1 = document.getElementById('bg1');
+      slides[0].classList.add('ativo');
 
-      bg0.style.backgroundImage = `url('${list[0]}')`;
-      bg0.classList.add('active');
-      if (list.length === 1) return;
-
-      setInterval(() => {
-        const next = (cur + 1) % list.length;
-        const show = cur % 2 === 0 ? bg1 : bg0;
-        const hide = cur % 2 === 0 ? bg0 : bg1;
-        show.style.backgroundImage = `url('${list[next]}')`;
-        show.classList.add('active');
-        setTimeout(() => hide.classList.remove('active'), 2000);
-        cur = next;
-      }, 6000);
-    }
+      if (slides.length > 1) {
+        setInterval(() => {
+          slides[cur].classList.remove('ativo');
+          cur = (cur + 1) % slides.length;
+          slides[cur].classList.add('ativo');
+        }, 7000);
+      }
+    })
+    .catch(() => {});
   </script>
 
   <script src="assets/js/player.js"></script>

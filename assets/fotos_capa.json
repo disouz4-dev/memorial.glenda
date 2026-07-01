@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "file": "IMG-20221015-WA0033.jpg",
+    "orient": "square",
+    "w": 473,
+    "h": 473,
+    "face_y": 41
+  },
+  {
+    "file": "IMG-20221225-WA0003.jpg",
+    "orient": "vertical",
+    "w": 900,
+    "h": 1600,
+    "face_y": 37
+  },
+  {
+    "file": "IMG-20240512-WA0130.jpg",
+    "orient": "vertical",
+    "w": 900,
+    "h": 1600,
+    "face_y": 25
+  },
+  {
+    "file": "WhatsApp Image 2026-06-25 at 15.31.0712.jpeg",
+    "orient": "vertical",
+    "w": 758,
+    "h": 1210,
+    "face_y": 42
+  },
+  {
+    "file": "WhatsApp Image 2026-06-25 at 15.32.11.jpeg",
+    "orient": "square",
+    "w": 960,
+    "h": 960,
+    "face_y": 23
+  },
+  {
+    "file": "WhatsApp Image 2026-06-25 at 15.36.49.jpeg",
+    "orient": "vertical",
+    "w": 768,
+    "h": 1024,
+    "face_y": 30
+  }
+]
