@@ -325,6 +325,38 @@ function waitForInteraction() {
   document.addEventListener('keydown',    unlock, { once: true });
 }
 
+// ── Ducking (abaixa player quando áudio da conversa toca) ────────
+let _duckVol = null;
+let _duckTimer = null;
+
+function rampVolume(from, to, ms, onDone) {
+  const steps = 20;
+  const delta = (to - from) / steps;
+  let step = 0;
+  clearInterval(_duckTimer);
+  _duckTimer = setInterval(() => {
+    step++;
+    audio.volume = Math.min(1, Math.max(0, from + delta * step));
+    const slider = document.getElementById('mp-vol');
+    if (slider) slider.value = audio.volume;
+    if (step >= steps) {
+      clearInterval(_duckTimer);
+      if (onDone) onDone();
+    }
+  }, ms / steps);
+}
+
+window.playerDuck = function(duck) {
+  if (duck) {
+    if (_duckVol === null) _duckVol = audio.volume;
+    rampVolume(audio.volume, Math.max(0.04, audio.volume * 0.15), 300);
+  } else {
+    const target = _duckVol ?? 0.7;
+    _duckVol = null;
+    rampVolume(audio.volume, target, 500);
+  }
+};
+
 // ── Init ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
