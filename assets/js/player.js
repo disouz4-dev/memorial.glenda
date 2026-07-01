@@ -349,11 +349,11 @@ function rampVolume(from, to, ms, onDone) {
 window.playerDuck = function(duck) {
   if (duck) {
     if (_duckVol === null) _duckVol = audio.volume;
-    rampVolume(audio.volume, Math.max(0.04, audio.volume * 0.15), 300);
+    rampVolume(audio.volume, 0.04, 250);
   } else {
     const target = _duckVol ?? 0.7;
     _duckVol = null;
-    rampVolume(audio.volume, target, 500);
+    rampVolume(audio.volume, target, 600);
   }
 };
 

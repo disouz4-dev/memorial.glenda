@@ -820,7 +820,7 @@ function initChat() {
       currentAudio.dispatchEvent(new Event('reset'));
     }
     if (audioEl.paused) {
-      audioEl.play().catch(() => {});
+      audioEl.play().catch(() => { if (window.playerDuck) window.playerDuck(false); });
       currentAudio = audioEl;
       if (window.playerDuck) window.playerDuck(true);
       iconEl.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
