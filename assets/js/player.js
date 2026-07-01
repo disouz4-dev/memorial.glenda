@@ -260,6 +260,67 @@ function dismissHint() {
   playerReady = true;
 }
 
+// ── Autoplay com fallback ─────────────────────────────────────────
+function tryAutoplay() {
+  audio.muted = false;
+  audio.play()
+    .then(() => {
+      // Tocou com som direto
+      isPlaying = true;
+      updatePlayBtn();
+      dismissHint();
+      saveState();
+    })
+    .catch(() => {
+      // Bloqueado — tenta mudo (sempre permitido)
+      audio.muted = true;
+      audio.play()
+        .then(() => {
+          // Toca mudo e tenta desmutar imediatamente
+          audio.muted = false;
+          if (!audio.muted) {
+            // Desmutou — tudo certo
+            isPlaying = true;
+            updatePlayBtn();
+            dismissHint();
+            saveState();
+          } else {
+            // Ainda mudo — aguarda primeiro toque
+            audio.pause();
+            showHint();
+            waitForInteraction();
+          }
+        })
+        .catch(() => {
+          showHint();
+          waitForInteraction();
+        });
+    });
+}
+
+function showHint() {
+  const hint = document.getElementById('mp-hint');
+  if (hint) hint.style.display = '';
+}
+
+function waitForInteraction() {
+  const unlock = () => {
+    audio.muted = false;
+    audio.play().then(() => {
+      isPlaying = true;
+      updatePlayBtn();
+      dismissHint();
+      saveState();
+    }).catch(() => {});
+    document.removeEventListener('click',      unlock);
+    document.removeEventListener('touchstart', unlock);
+    document.removeEventListener('keydown',    unlock);
+  };
+  document.addEventListener('click',      unlock, { once: true });
+  document.addEventListener('touchstart', unlock, { once: true, passive: true });
+  document.addEventListener('keydown',    unlock, { once: true });
+}
+
 // ── Init ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
@@ -270,6 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadTrack(startIdx, false);
   audio.volume = 0.2;
 
-  // Marca pronto após 500ms (aguarda possível autoplay policy)
-  setTimeout(() => { playerReady = true; }, 500);
+  // Tenta autoplay após carregar o áudio
+  audio.addEventListener('canplay', tryAutoplay, { once: true });
 });
