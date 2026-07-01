@@ -34,13 +34,13 @@
     }
     .slide.ativo { opacity: 1; }
 
-    /* Camada 1: foto embaçada cobre tudo (preenche as laterais) */
+    /* Camada 1: foto embaçada cobre tudo — mesmo brilho da foto real */
     .slide-blur {
       position: absolute;
-      inset: -6%;           /* expande para esconder borda do blur */
+      inset: -6%;
       background-size: cover;
       background-position: center top;
-      filter: blur(40px) brightness(0.35) saturate(1.4);
+      filter: blur(45px) brightness(0.75) saturate(1.3);
     }
 
     /* Camada 2: foto real centrada, SEM esticar */
@@ -48,35 +48,63 @@
       position: absolute;
       inset: 0;
       display: flex;
-      align-items: flex-start;   /* rosto no topo */
+      align-items: flex-start;
       justify-content: center;
       overflow: hidden;
     }
     .slide-foto img {
-      /* Vertical: ocupa altura toda, largura natural → blur preenche lados */
       height: 100%;
       width: auto;
       max-width: 100%;
       display: block;
       flex-shrink: 0;
+      /* Máscara: desfaz as bordas esquerda/direita da foto no blur — cria continuidade */
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent  0%,
+        black       10%,
+        black       90%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent  0%,
+        black       10%,
+        black       90%,
+        transparent 100%
+      );
     }
-    /* Fotos quadradas/landscape: cobre tela com object-fit cover posicionado no rosto */
     .slide-foto img.landscape {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      /* Landscape: desfaz bordas em cima e embaixo */
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent  0%,
+        black        8%,
+        black       85%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        transparent  0%,
+        black        8%,
+        black       85%,
+        transparent 100%
+      );
     }
 
-    /* Camada 3: gradiente para o texto ser legível embaixo */
+    /* Camada 3: gradiente escuro só no rodapé para o texto */
     .slide-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.15) 0%,
-        rgba(0,0,0,0.0)  25%,
-        rgba(0,0,0,0.55) 65%,
-        rgba(0,0,0,0.92) 100%
+        rgba(0,0,0,0.0)  0%,
+        rgba(0,0,0,0.0)  45%,
+        rgba(0,0,0,0.65) 72%,
+        rgba(0,0,0,0.93) 100%
       );
     }
 
