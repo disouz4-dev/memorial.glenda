@@ -41,6 +41,7 @@
     }
     @keyframes giro { to { transform: rotate(360deg); } }
 
+    /* Tela de login */
     .page {
       position: relative; z-index: 1;
       height: 100dvh;
@@ -54,12 +55,46 @@
     .nome  { font-family: var(--serif); font-size: clamp(3rem,10vw,5rem); font-weight: 400; letter-spacing: 0.06em; line-height: 1; margin-bottom: 0.5rem; animation: surgir 0.9s ease 0.2s both; }
     .datas { font-size: 0.78rem; font-weight: 300; letter-spacing: 0.22em; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 1rem; animation: surgir 0.9s ease 0.35s both; }
     .linha { width: 40px; height: 1px; background: var(--green); opacity: 0.7; margin: 0 auto 2rem; animation: surgir 0.9s ease 0.4s both; }
-    .pergunta { font-size: 0.88rem; font-weight: 300; color: rgba(255,255,255,0.45); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.6rem; animation: surgir 0.9s ease 0.5s both; }
 
-    .cards { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: surgir 1s ease 0.65s both; }
+    /* Formulário de login */
+    .login-box {
+      width: 100%; max-width: 320px;
+      display: flex; flex-direction: column; gap: 0.75rem;
+      animation: surgir 1s ease 0.55s both;
+    }
+    .login-input {
+      width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px; color: #fff; font-size: 1rem; padding: 0.85rem 1rem;
+      font-family: var(--sans); outline: none; transition: border-color 0.2s;
+    }
+    .login-input:focus { border-color: var(--green); }
+    .login-input::placeholder { color: rgba(255,255,255,0.3); }
+    .login-erro { font-size: 0.8rem; color: #ff6b6b; min-height: 1.1rem; text-align: center; }
+    .login-btn {
+      width: 100%; padding: 0.9rem; border-radius: 12px; border: none;
+      background: var(--green); color: #fff;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      font-family: var(--sans); transition: all 0.2s; letter-spacing: 0.03em;
+    }
+    .login-btn:hover:not(:disabled) { background: #1db954; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
+    .login-btn:active  { transform: translateY(0); }
+    .login-btn:disabled { opacity: 0.6; cursor: default; }
+    .login-primeiro {
+      margin-top: 0.25rem; font-size: 0.78rem; color: rgba(255,255,255,0.35);
+      cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+      background: none; border: none; font-family: var(--sans); width: 100%; text-align: center;
+    }
+    .login-primeiro:hover { color: var(--green); }
+    .login-ok-msg { font-size: 0.82rem; color: var(--green); text-align: center; min-height: 1.1rem; }
+
+    /* Cards do suporte (ocultos por padrão) */
+    #suporte-view { display: none; width: 100%; max-width: 400px; }
+    #suporte-view.visivel { display: block; animation: surgir 0.6s ease both; }
+    .suporte-label { font-size: 0.82rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem; }
+    .cards { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
     .card {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 0.6rem; width: 160px; min-height: 160px; border-radius: 20px;
+      gap: 0.6rem; width: 150px; min-height: 150px; border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
       cursor: pointer; transition: all 0.25s ease; color: #fff;
       backdrop-filter: blur(6px); padding: 1.5rem 1rem; position: relative; overflow: hidden;
@@ -72,12 +107,9 @@
     .card:hover::before { opacity: 1; }
     .card:hover { border-color: rgba(37,211,102,0.4); background: rgba(255,255,255,0.07); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(37,211,102,0.15); }
     .card:active { transform: translateY(-1px) scale(0.98); }
-    .card-emoji { font-size: 2.4rem; line-height: 1; }
-    .card-nome  { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em; }
-    .card-papel { font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
-
-    /* Cards do suporte (admin vê as duas opções após login) */
-    .cards.suporte-mode .card { pointer-events: all; }
+    .card-emoji { font-size: 2.2rem; line-height: 1; }
+    .card-nome  { font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; }
+    .card-papel { font-size: 0.72rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
 
     .rodape {
       position: absolute; bottom: max(1.5rem, env(safe-area-inset-bottom));
@@ -85,41 +117,6 @@
       font-size: 0.72rem; color: rgba(255,255,255,0.18); letter-spacing: 0.06em;
       animation: surgir 1s ease 1s both;
     }
-
-    /* Overlay de senha */
-    .pin-overlay {
-      display: none; position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(12px);
-      align-items: center; justify-content: center;
-    }
-    .pin-overlay.ativo { display: flex; }
-    .pin-box {
-      background: #12181f; border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 20px; padding: 2rem 2.5rem; text-align: center; min-width: 280px; max-width: 90vw;
-    }
-    .pin-titulo { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 0.3rem; }
-    .pin-sub    { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 1.4rem; }
-    .pin-input {
-      width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 10px; color: #fff; font-size: 1rem; padding: 0.75rem 1rem;
-      font-family: var(--sans); outline: none; transition: border-color 0.2s;
-    }
-    .pin-input:focus { border-color: var(--green); }
-    .pin-erro { font-size: 0.8rem; color: #ff6b6b; margin-top: 0.6rem; min-height: 1.1rem; }
-    .pin-btns { display: flex; gap: 0.6rem; margin-top: 1rem; }
-    .pin-btn { flex: 1; padding: 0.75rem; border-radius: 10px; border: none; font-size: 0.92rem; font-weight: 600; cursor: pointer; font-family: var(--sans); transition: all 0.2s; }
-    .pin-btn-ok { background: var(--green); color: #fff; }
-    .pin-btn-ok:hover:not(:disabled) { background: #1db954; }
-    .pin-btn-ok:disabled { opacity: 0.6; cursor: default; }
-    .pin-btn-cancel { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
-    .pin-btn-cancel:hover { background: rgba(255,255,255,0.14); }
-    .pin-primeiro {
-      margin-top: 1rem; font-size: 0.78rem; color: rgba(255,255,255,0.35);
-      cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
-      background: none; border: none; font-family: var(--sans); width: 100%;
-    }
-    .pin-primeiro:hover { color: var(--green); }
-    .pin-ok-msg { font-size: 0.82rem; color: var(--green); margin-top: 0.8rem; }
 
     @keyframes surgir {
       from { opacity: 0; transform: translateY(14px); }
@@ -137,60 +134,58 @@
   <h1 class="nome">Glenda</h1>
   <p class="datas">21 / 01 / 2004 — 30 / 07 / 2024</p>
   <div class="linha"></div>
-  <p class="pergunta" id="pergunta">Quem é você?</p>
-  <div class="cards" id="cards">
-    <div class="card" id="card-mae" onclick="escolher('mae')">
-      <span class="card-emoji">💚</span>
-      <span class="card-nome">Simone</span>
-      <span class="card-papel">Mãe</span>
-    </div>
-    <div class="card" id="card-pai" onclick="escolher('pai')">
-      <span class="card-emoji">🐰</span>
-      <span class="card-nome">Marcos</span>
-      <span class="card-papel">Pai</span>
-    </div>
-  </div>
-</div>
-<p class="rodape">Memorial Glenda &mdash; para sempre em nossos corações</p>
 
-<!-- Overlay de senha -->
-<div class="pin-overlay" id="pin-overlay">
-  <div class="pin-box">
-    <div class="pin-titulo" id="pin-titulo"></div>
-    <div class="pin-sub">Digite sua senha</div>
-    <input class="pin-input" id="pin-input" type="password" placeholder="senha"
-           autocomplete="current-password"
-           onkeydown="if(event.key==='Enter')confirmarSenha()">
-    <div class="pin-erro" id="pin-erro"></div>
-    <div class="pin-btns">
-      <button class="pin-btn pin-btn-cancel" onclick="fecharPin()">Cancelar</button>
-      <button class="pin-btn pin-btn-ok" id="pin-btn-ok" onclick="confirmarSenha()">Entrar</button>
+  <!-- Formulário de login (padrão) -->
+  <div class="login-box" id="login-view">
+    <input class="login-input" id="inp-email" type="email" placeholder="seu e-mail"
+           autocomplete="email" onkeydown="if(event.key==='Enter')focarSenha()">
+    <input class="login-input" id="inp-senha" type="password" placeholder="senha"
+           autocomplete="current-password" onkeydown="if(event.key==='Enter')fazerLogin()">
+    <div class="login-erro" id="login-erro"></div>
+    <button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar</button>
+    <button class="login-primeiro" onclick="primeiroAcesso()">Primeiro acesso? Defina sua senha</button>
+    <div class="login-ok-msg" id="login-ok-msg"></div>
+  </div>
+
+  <!-- Cards do suporte (aparece só após login de suporte) -->
+  <div id="suporte-view">
+    <p class="suporte-label">Qual memorial deseja acessar?</p>
+    <div class="cards">
+      <div class="card" onclick="location.href='mae.html'">
+        <span class="card-emoji">💚</span>
+        <span class="card-nome">Simone</span>
+        <span class="card-papel">Mãe</span>
+      </div>
+      <div class="card" onclick="location.href='pai.html'">
+        <span class="card-emoji">🐰</span>
+        <span class="card-nome">Marcos</span>
+        <span class="card-papel">Pai</span>
+      </div>
     </div>
-    <button class="pin-primeiro" onclick="primeiroAcesso()">Primeiro acesso? Defina sua senha</button>
-    <div class="pin-ok-msg" id="pin-ok-msg" style="display:none"></div>
   </div>
 </div>
+
+<p class="rodape">Memorial Glenda &mdash; para sempre em nossos corações</p>
 
 <script type="module">
 import { initializeApp }           from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged }
                                    from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyCJBEvY1TQ2veZr_eNV-sIKwDdUIojouSw",
-  authDomain:        "memorial-glenda-a1c38.firebaseapp.com",
-  projectId:         "memorial-glenda-a1c38",
-  storageBucket:     "memorial-glenda-a1c38.firebasestorage.app",
-  messagingSenderId: "67971586664",
-  appId:             "1:67971586664:web:11804b7dd4ad2300a3f9dd"
+  apiKey:            "AIzaSyCs3xecW_D39KkmyEr5GpcSX0O5SAjXME8",
+  authDomain:        "memorialglenda08.firebaseapp.com",
+  projectId:         "memorialglenda08",
+  storageBucket:     "memorialglenda08.firebasestorage.app",
+  messagingSenderId: "656108355499",
+  appId:             "1:656108355499:web:11804b7dd4ad2300a3f9dd"
 };
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// ── Mapeamento de emails → perfil ─────────────────────────────────
 const EMAILS = {
-  mae:     'MAE_EMAIL_AQUI',              // substituir quando Simone passar o email
+  mae:     'MAE_EMAIL_AQUI',
   pai:     'contato@agenciagm.com.br',
   suporte: 'diegodisouza10@gmail.com'
 };
@@ -202,76 +197,62 @@ function perfilDoEmail(email) {
   return null;
 }
 
-// ── Auth state ────────────────────────────────────────────────────
 onAuthStateChanged(auth, user => {
   document.getElementById('loading').style.display = 'none';
-  if (!user) return; // mostra tela de login normalmente
+  if (!user) return;
 
   const perfil = perfilDoEmail(user.email);
   if (perfil === 'mae')     { location.replace('mae.html'); return; }
   if (perfil === 'pai')     { location.replace('pai.html'); return; }
   if (perfil === 'suporte') {
-    // Suporte já autenticado: mostra os dois cards para escolher
-    document.getElementById('pergunta').textContent = 'Qual memorial deseja acessar?';
-    window._suporteLogado = true;
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('suporte-view').classList.add('visivel');
     return;
   }
-  // Email desconhecido
   auth.signOut();
 });
 
-// ── Login ─────────────────────────────────────────────────────────
-let _alvo = null;
-
-window.escolher = function(quem) {
-  // Suporte já logado: vai direto sem senha
-  if (window._suporteLogado) { location.href = quem + '.html'; return; }
-
-  _alvo = quem;
-  const nomes = { mae: 'Simone', pai: 'Marcos' };
-  document.getElementById('pin-titulo').textContent = nomes[quem] || quem;
-  document.getElementById('pin-input').value = '';
-  document.getElementById('pin-erro').textContent = '';
-  document.getElementById('pin-overlay').classList.add('ativo');
-  setTimeout(() => document.getElementById('pin-input').focus(), 120);
+window.focarSenha = function() {
+  document.getElementById('inp-senha').focus();
 };
 
-window.fecharPin = function() {
-  document.getElementById('pin-overlay').classList.remove('ativo');
-  _alvo = null;
+window.fazerLogin = async function() {
+  const email = document.getElementById('inp-email').value.trim();
+  const senha = document.getElementById('inp-senha').value;
+  const btn   = document.getElementById('login-btn');
+  const erro  = document.getElementById('login-erro');
+
+  if (!email || !senha) { erro.textContent = 'Preencha e-mail e senha.'; return; }
+
+  erro.textContent = '';
+  btn.textContent = '...'; btn.disabled = true;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, senha);
+    // onAuthStateChanged redireciona
+  } catch(e) {
+    const msg = e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found'
+      ? 'E-mail ou senha incorretos.'
+      : 'Erro ao entrar. Tente novamente.';
+    erro.textContent = msg;
+    btn.textContent = 'Entrar'; btn.disabled = false;
+  }
 };
 
 window.primeiroAcesso = async function() {
-  if (!_alvo) return;
-  const btn = document.getElementById('pin-btn-ok');
-  const msg = document.getElementById('pin-ok-msg');
-  btn.disabled = true;
-  msg.style.display = 'none';
-  try {
-    const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js');
-    await sendPasswordResetEmail(auth, EMAILS[_alvo]);
-    msg.style.display = '';
-    msg.textContent = '✓ Email enviado! Verifique sua caixa de entrada para definir sua senha.';
-    document.getElementById('pin-primeiro').style.display = 'none';
-  } catch(e) {
-    document.getElementById('pin-erro').textContent = 'Erro ao enviar email. Tente novamente.';
-  }
-  btn.disabled = false;
-};
+  const email = document.getElementById('inp-email').value.trim();
+  const erro  = document.getElementById('login-erro');
+  const ok    = document.getElementById('login-ok-msg');
 
-window.confirmarSenha = async function() {
-  const senha = document.getElementById('pin-input').value;
-  if (!senha || !_alvo) return;
-  const btn = document.getElementById('pin-btn-ok');
-  btn.textContent = '...'; btn.disabled = true;
+  if (!email) { erro.textContent = 'Digite seu e-mail antes.'; return; }
+
+  erro.textContent = ''; ok.textContent = '';
+
   try {
-    await signInWithEmailAndPassword(auth, EMAILS[_alvo], senha);
-    // onAuthStateChanged cuida do redirect
+    await sendPasswordResetEmail(auth, email);
+    ok.textContent = '✓ Email enviado! Verifique sua caixa de entrada.';
   } catch(e) {
-    document.getElementById('pin-erro').textContent = 'Senha incorreta.';
-    document.getElementById('pin-input').value = '';
-    document.getElementById('pin-input').focus();
-    btn.textContent = 'Entrar'; btn.disabled = false;
+    erro.textContent = 'Não foi possível enviar o email. Verifique o endereço.';
   }
 };
 </script>
