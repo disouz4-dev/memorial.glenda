@@ -28,7 +28,6 @@
                   #0a0c0f;
     }
 
-    /* Loading inicial */
     #loading {
       position: fixed; inset: 0; z-index: 500;
       background: #0a0c0f;
@@ -41,7 +40,6 @@
     }
     @keyframes giro { to { transform: rotate(360deg); } }
 
-    /* Tela de login */
     .page {
       position: relative; z-index: 1;
       height: 100dvh;
@@ -56,7 +54,7 @@
     .datas { font-size: 0.78rem; font-weight: 300; letter-spacing: 0.22em; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 1rem; animation: surgir 0.9s ease 0.35s both; }
     .linha { width: 40px; height: 1px; background: var(--green); opacity: 0.7; margin: 0 auto 2rem; animation: surgir 0.9s ease 0.4s both; }
 
-    /* Formulário de login */
+    /* Login */
     .login-box {
       width: 100%; max-width: 320px;
       display: flex; flex-direction: column; gap: 0.75rem;
@@ -70,23 +68,17 @@
     .login-input:focus { border-color: var(--green); }
     .login-input::placeholder { color: rgba(255,255,255,0.3); }
     .login-erro { font-size: 0.8rem; color: #ff6b6b; min-height: 1.1rem; text-align: center; }
-    .login-btns { display: flex; gap: 0.6rem; }
     .login-btn {
-      flex: 1; padding: 0.9rem; border-radius: 12px; border: none;
+      width: 100%; padding: 0.9rem; border-radius: 12px; border: none;
       background: var(--green); color: #fff;
       font-size: 1rem; font-weight: 600; cursor: pointer;
       font-family: var(--sans); transition: all 0.2s; letter-spacing: 0.03em;
     }
-    .login-btn-sec {
-      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);
-    }
-    .login-btn-sec:hover:not(:disabled) { background: rgba(255,255,255,0.15); transform: translateY(-1px); box-shadow: none; }
-    .login-btn:not(.login-btn-sec):hover:not(:disabled) { background: #1db954; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
-    .login-btn:active  { transform: translateY(0); }
+    .login-btn:hover:not(:disabled) { background: #1db954; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
+    .login-btn:active { transform: translateY(0); }
     .login-btn:disabled { opacity: 0.6; cursor: default; }
-    .login-ok-msg { font-size: 0.82rem; color: var(--green); text-align: center; min-height: 1.1rem; }
 
-    /* Cards do suporte (ocultos por padrão) */
+    /* Cards do suporte */
     #suporte-view { display: none; width: 100%; max-width: 400px; }
     #suporte-view.visivel { display: block; animation: surgir 0.6s ease both; }
     .suporte-label { font-size: 0.82rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem; }
@@ -107,7 +99,7 @@
     .card:hover { border-color: rgba(37,211,102,0.4); background: rgba(255,255,255,0.07); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(37,211,102,0.15); }
     .card:active { transform: translateY(-1px) scale(0.98); }
     .card-emoji { font-size: 2.2rem; line-height: 1; }
-    .card-nome  { font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; }
+    .card-nome  { font-size: 1rem; font-weight: 600; }
     .card-papel { font-size: 0.72rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
 
     .rodape {
@@ -116,6 +108,25 @@
       font-size: 0.72rem; color: rgba(255,255,255,0.18); letter-spacing: 0.06em;
       animation: surgir 1s ease 1s both;
     }
+
+    /* Modal troca de senha */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(14px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.ativo { display: flex; }
+    .modal-box {
+      background: #12181f; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 2rem 2.5rem; text-align: center;
+      min-width: 300px; max-width: 90vw; animation: surgir 0.4s ease both;
+    }
+    .modal-icone  { font-size: 2rem; margin-bottom: 0.8rem; }
+    .modal-titulo { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .modal-sub    { font-size: 0.83rem; color: rgba(255,255,255,0.45); margin-bottom: 1.4rem; line-height: 1.5; }
+    .modal-erro   { font-size: 0.8rem; color: #ff6b6b; min-height: 1.1rem; margin-top: 0.3rem; }
+    .modal-ok-msg { font-size: 0.82rem; color: var(--green); margin-top: 0.6rem; }
+    .modal-inputs { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.5rem; }
 
     @keyframes surgir {
       from { opacity: 0; transform: translateY(14px); }
@@ -134,23 +145,17 @@
   <p class="datas">21 / 01 / 2004 — 30 / 07 / 2024</p>
   <div class="linha"></div>
 
-  <!-- Formulário de login (padrão) -->
+  <!-- Login -->
   <div class="login-box" id="login-view">
     <input class="login-input" id="inp-email" type="email" placeholder="seu e-mail"
-           autocomplete="email" onkeydown="if(event.key==='Enter')focarSenha()">
+           autocomplete="email" onkeydown="if(event.key==='Enter')document.getElementById('inp-senha').focus()">
     <input class="login-input" id="inp-senha" type="password" placeholder="senha"
-           autocomplete="current-password" onkeydown="if(event.key==='Enter')acoeBotaoPrincipal()">
-    <input class="login-input" id="inp-confirma" type="password" placeholder="confirmar senha"
-           style="display:none" onkeydown="if(event.key==='Enter')criarConta()">
+           autocomplete="current-password" onkeydown="if(event.key==='Enter')fazerLogin()">
     <div class="login-erro" id="login-erro"></div>
-    <div class="login-btns">
-      <button class="login-btn login-btn-sec" id="btn-criar" onclick="alternarModo()">Criar conta</button>
-      <button class="login-btn" id="login-btn" onclick="acoeBotaoPrincipal()">Entrar</button>
-    </div>
-    <div class="login-ok-msg" id="login-ok-msg"></div>
+    <button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar</button>
   </div>
 
-  <!-- Cards do suporte (aparece só após login de suporte) -->
+  <!-- Cards do suporte -->
   <div id="suporte-view">
     <p class="suporte-label">Qual memorial deseja acessar?</p>
     <div class="cards">
@@ -170,9 +175,27 @@
 
 <p class="rodape">Memorial Glenda &mdash; para sempre em nossos corações</p>
 
+<!-- Modal: trocar senha no primeiro acesso -->
+<div class="modal-overlay" id="modal-senha">
+  <div class="modal-box">
+    <div class="modal-icone">🔒</div>
+    <div class="modal-titulo">Defina sua senha</div>
+    <div class="modal-sub">Por segurança, crie uma senha pessoal<br>para acessar o memorial.</div>
+    <div class="modal-inputs">
+      <input class="login-input" id="nova-senha" type="password" placeholder="nova senha"
+             autocomplete="new-password" onkeydown="if(event.key==='Enter')document.getElementById('conf-senha').focus()">
+      <input class="login-input" id="conf-senha" type="password" placeholder="confirmar nova senha"
+             autocomplete="new-password" onkeydown="if(event.key==='Enter')salvarSenha()">
+    </div>
+    <div class="modal-erro" id="modal-erro"></div>
+    <button class="login-btn" id="btn-salvar" onclick="salvarSenha()" style="margin-top:0.8rem">Salvar senha</button>
+    <div class="modal-ok-msg" id="modal-ok"></div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged }
+import { getAuth, signInWithEmailAndPassword, updatePassword, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 
 const firebaseConfig = {
@@ -187,11 +210,7 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const EMAILS_PERMITIDOS = [
-  'MAE_EMAIL_AQUI',
-  'contato@agenciagm.com.br',
-  'diegodisouza10@gmail.com'
-];
+const SENHA_PADRAO = '123456';
 
 function perfilDoEmail(email) {
   if (email === 'MAE_EMAIL_AQUI')           return 'mae';
@@ -200,55 +219,35 @@ function perfilDoEmail(email) {
   return null;
 }
 
-onAuthStateChanged(auth, user => {
-  document.getElementById('loading').style.display = 'none';
-  if (!user) return;
+function chaveAlterada(uid) { return 'memorial_pwset_' + uid; }
 
-  const perfil = perfilDoEmail(user.email);
+function redirecionarOuCards(perfil) {
   if (perfil === 'mae')     { location.replace('mae.html'); return; }
   if (perfil === 'pai')     { location.replace('pai.html'); return; }
   if (perfil === 'suporte') {
     document.getElementById('login-view').style.display = 'none';
     document.getElementById('suporte-view').classList.add('visivel');
+  }
+}
+
+onAuthStateChanged(auth, user => {
+  document.getElementById('loading').style.display = 'none';
+  if (!user) return;
+
+  const perfil = perfilDoEmail(user.email);
+  if (!perfil) { auth.signOut(); return; }
+
+  // Primeiro acesso: senha ainda não foi trocada neste dispositivo
+  if (!localStorage.getItem(chaveAlterada(user.uid))) {
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('modal-senha').classList.add('ativo');
+    setTimeout(() => document.getElementById('nova-senha').focus(), 120);
     return;
   }
-  auth.signOut();
+
+  redirecionarOuCards(perfil);
 });
 
-// ── Alternância login / criar conta ───────────────────────────────
-let _modoCriar = false;
-
-window.focarSenha = function() {
-  document.getElementById('inp-senha').focus();
-};
-
-window.alternarModo = function() {
-  _modoCriar = !_modoCriar;
-  const confirma   = document.getElementById('inp-confirma');
-  const btnPrinc   = document.getElementById('login-btn');
-  const btnSec     = document.getElementById('btn-criar');
-  const erro       = document.getElementById('login-erro');
-  const ok         = document.getElementById('login-ok-msg');
-  erro.textContent = ''; ok.textContent = '';
-
-  if (_modoCriar) {
-    confirma.style.display = '';
-    btnPrinc.textContent = 'Criar conta';
-    btnSec.textContent   = 'Já tenho conta';
-    setTimeout(() => confirma.focus(), 80);
-  } else {
-    confirma.style.display = 'none';
-    confirma.value = '';
-    btnPrinc.textContent = 'Entrar';
-    btnSec.textContent   = 'Criar conta';
-  }
-};
-
-window.acoeBotaoPrincipal = function() {
-  _modoCriar ? criarConta() : fazerLogin();
-};
-
-// ── Login ─────────────────────────────────────────────────────────
 window.fazerLogin = async function() {
   const email = document.getElementById('inp-email').value.trim();
   const senha = document.getElementById('inp-senha').value;
@@ -256,7 +255,6 @@ window.fazerLogin = async function() {
   const erro  = document.getElementById('login-erro');
 
   if (!email || !senha) { erro.textContent = 'Preencha e-mail e senha.'; return; }
-
   erro.textContent = '';
   btn.textContent = '...'; btn.disabled = true;
 
@@ -270,36 +268,33 @@ window.fazerLogin = async function() {
   }
 };
 
-// ── Criar conta ───────────────────────────────────────────────────
-window.criarConta = async function() {
-  const email    = document.getElementById('inp-email').value.trim();
-  const senha    = document.getElementById('inp-senha').value;
-  const confirma = document.getElementById('inp-confirma').value;
-  const btn      = document.getElementById('login-btn');
-  const erro     = document.getElementById('login-erro');
-  const ok       = document.getElementById('login-ok-msg');
+window.salvarSenha = async function() {
+  const nova    = document.getElementById('nova-senha').value;
+  const conf    = document.getElementById('conf-senha').value;
+  const btn     = document.getElementById('btn-salvar');
+  const erro    = document.getElementById('modal-erro');
+  const ok      = document.getElementById('modal-ok');
 
   erro.textContent = ''; ok.textContent = '';
 
-  if (!email || !senha) { erro.textContent = 'Preencha e-mail e senha.'; return; }
-  if (senha !== confirma) { erro.textContent = 'As senhas não coincidem.'; return; }
-  if (senha.length < 6)  { erro.textContent = 'A senha deve ter pelo menos 6 caracteres.'; return; }
-  if (!EMAILS_PERMITIDOS.includes(email)) {
-    erro.textContent = 'Este e-mail não está autorizado.'; return;
-  }
+  if (!nova)          { erro.textContent = 'Digite a nova senha.'; return; }
+  if (nova.length < 6){ erro.textContent = 'Mínimo de 6 caracteres.'; return; }
+  if (nova !== conf)  { erro.textContent = 'As senhas não coincidem.'; return; }
+  if (nova === SENHA_PADRAO) { erro.textContent = 'Use uma senha diferente da padrão.'; return; }
 
   btn.textContent = '...'; btn.disabled = true;
 
   try {
-    await createUserWithEmailAndPassword(auth, email, senha);
-    // onAuthStateChanged cuida do redirecionamento
+    await updatePassword(auth.currentUser, nova);
+    localStorage.setItem(chaveAlterada(auth.currentUser.uid), '1');
+    ok.textContent = '✓ Senha definida!';
+    setTimeout(() => {
+      document.getElementById('modal-senha').classList.remove('ativo');
+      redirecionarOuCards(perfilDoEmail(auth.currentUser.email));
+    }, 900);
   } catch(e) {
-    if (e.code === 'auth/email-already-in-use') {
-      erro.textContent = 'Este e-mail já possui cadastro. Use "Entrar".';
-    } else {
-      erro.textContent = 'Erro ao criar conta. Tente novamente.';
-    }
-    btn.textContent = 'Criar conta'; btn.disabled = false;
+    erro.textContent = 'Erro ao salvar. Tente novamente.';
+    btn.textContent = 'Salvar senha'; btn.disabled = false;
   }
 };
 </script>
