@@ -66,31 +66,34 @@
       text-align: center;
     }
 
+    .home-top    { text-align: center; }
+    .home-bottom { text-align: center; }
+
     .nome {
       font-family: var(--serif);
       font-size: clamp(3rem, 12vw, 6rem);
       font-weight: 400; letter-spacing: 0.06em;
-      color: #fff; line-height: 1; margin-bottom: 0.5rem;
+      color: #fff; line-height: 1; margin-bottom: 0.35rem;
       text-shadow: 0 2px 30px rgba(0,0,0,0.7);
     }
     .subtitulo {
       font-size: 0.85rem; font-weight: 300;
       letter-spacing: 0.28em; color: rgba(255,255,255,0.6);
-      text-transform: uppercase; margin-bottom: 1.4rem;
+      text-transform: uppercase; margin-bottom: 0;
     }
     .linha {
       width: 48px; height: 1px; background: var(--green);
-      margin: 0 auto 1.4rem; opacity: 0.9;
+      margin: 0 auto 1.2rem; opacity: 0.9;
     }
     .frase {
       font-family: var(--serif); font-style: italic;
       font-size: clamp(0.95rem, 2.5vw, 1.2rem);
       color: rgba(255,255,255,0.82); line-height: 1.75;
-      max-width: 440px; margin-bottom: 2.2rem;
+      max-width: 440px; margin-bottom: 1.6rem;
       text-shadow: 0 1px 12px rgba(0,0,0,0.6);
     }
 
-    .btns { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .btns { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.8rem; }
     .btn-home {
       display: inline-flex; align-items: center; gap: 0.55rem;
       padding: 0.85rem 1.8rem; border-radius: 50px; text-decoration: none;
@@ -517,32 +520,36 @@
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.01 7.01 0 0 0-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.47.47 0 0 0-.59.22L2.74 8.87a.47.47 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.37 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.47.47 0 0 0-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
   </button>
   <div class="page">
-    <h1 class="nome">Glenda</h1>
-    <p class="subtitulo">Minha filha, para sempre em meu coração</p>
-    <div class="linha"></div>
-    <p class="frase">
-      "Cada mensagem, cada áudio, cada foto —<br>
-      tudo aqui é amor guardado para não se perder."
-    </p>
-    <div class="btns">
-      <a href="#chat" class="btn-home btn-green">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-        Ver Conversa
-      </a>
-      <a href="#galeria" class="btn-home btn-ghost">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-        Galeria
-      </a>
-      <a href="#apresentacoes" class="btn-home btn-ghost">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
-        Ela Cantava
-      </a>
+    <div class="home-top">
+      <h1 class="nome">Glenda</h1>
+      <p class="subtitulo">Minha filha, para sempre em meu coração</p>
     </div>
-    <div class="stats">
-      <div class="stat"><span class="stat-n">23.801</span><span class="stat-l">mensagens</span></div>
-      <div class="stat"><span class="stat-n">1.664</span><span class="stat-l">fotos</span></div>
-      <div class="stat"><span class="stat-n">3.141</span><span class="stat-l">áudios</span></div>
-      <div class="stat"><span class="stat-n">171</span><span class="stat-l">vídeos</span></div>
+    <div class="home-bottom">
+      <div class="linha"></div>
+      <p class="frase">
+        "Cada mensagem, cada áudio, cada foto —<br>
+        tudo aqui é amor guardado para não se perder."
+      </p>
+      <div class="btns">
+        <a href="#chat" class="btn-home btn-green">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+          Ver Conversa
+        </a>
+        <a href="#galeria" class="btn-home btn-ghost">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          Galeria
+        </a>
+        <a href="#apresentacoes" class="btn-home btn-ghost">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+          Ela Cantava
+        </a>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-n">23.801</span><span class="stat-l">mensagens</span></div>
+        <div class="stat"><span class="stat-n">1.664</span><span class="stat-l">fotos</span></div>
+        <div class="stat"><span class="stat-n">3.141</span><span class="stat-l">áudios</span></div>
+        <div class="stat"><span class="stat-n">171</span><span class="stat-l">vídeos</span></div>
+      </div>
     </div>
   </div>
 </div>
