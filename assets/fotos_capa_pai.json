@@ -1,0 +1,30 @@
+[
+  {
+    "file": "esquiando.jpg",
+    "orient": "landscape",
+    "w": 1920,
+    "h": 1080,
+    "face_y": 30
+  },
+  {
+    "file": "piscina.jpg",
+    "orient": "landscape",
+    "w": 1920,
+    "h": 1080,
+    "face_y": 30
+  },
+  {
+    "file": "restaurante 2 .jpg",
+    "orient": "landscape",
+    "w": 1920,
+    "h": 1080,
+    "face_y": 30
+  },
+  {
+    "file": "restaurante.jpg",
+    "orient": "landscape",
+    "w": 1920,
+    "h": 1080,
+    "face_y": 30
+  }
+]

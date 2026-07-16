@@ -1,1 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><script>location.replace('index.html#chat');</script></head><body></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><script>
+try { var q = localStorage.getItem('memorial_quem'); } catch(e) {}
+location.replace((q === 'pai' ? 'pai' : 'mae') + '.html#chat');
+</script></head><body></body></html>
