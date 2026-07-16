@@ -1098,9 +1098,40 @@ function initGaleria() {
 }
 </script>
 
+<script type="module">
+import { initializeApp }        from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut }
+                                from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyCJBEvY1TQ2veZr_eNV-sIKwDdUIojouSw",
+  authDomain:        "memorial-glenda-a1c38.firebaseapp.com",
+  projectId:         "memorial-glenda-a1c38",
+  storageBucket:     "memorial-glenda-a1c38.firebasestorage.app",
+  messagingSenderId: "67971586664",
+  appId:             "1:67971586664:web:11804b7dd4ad2300a3f9dd"
+};
+
+const EMAILS_PERMITIDOS = [
+  'contato@agenciagm.com.br',  // Marcos (pai)
+  'diegodisouza10@gmail.com'   // suporte
+];
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, user => {
+  if (!user || !EMAILS_PERMITIDOS.includes(user.email)) {
+    location.replace('index.html');
+  }
+});
+
+window._fbSignOut = async () => { await signOut(auth); };
+</script>
+
 <script>
-function logout() {
-  try { localStorage.removeItem('memorial_quem'); } catch(e) {}
+async function logout() {
+  if (window._fbSignOut) await window._fbSignOut();
   location.href = 'index.html';
 }
 </script>

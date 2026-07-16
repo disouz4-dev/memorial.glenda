@@ -16,12 +16,9 @@
     }
 
     html, body {
-      height: 100dvh;
-      overflow: hidden;
-      background: #0a0c0f;
-      color: #fff;
-      font-family: var(--sans);
-      -webkit-font-smoothing: antialiased;
+      height: 100dvh; overflow: hidden;
+      background: #0a0c0f; color: #fff;
+      font-family: var(--sans); -webkit-font-smoothing: antialiased;
     }
 
     .bg {
@@ -31,6 +28,19 @@
                   #0a0c0f;
     }
 
+    /* Loading inicial */
+    #loading {
+      position: fixed; inset: 0; z-index: 500;
+      background: #0a0c0f;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .spin-sm {
+      width: 28px; height: 28px;
+      border: 2px solid rgba(255,255,255,0.1); border-top-color: var(--green);
+      border-radius: 50%; animation: giro 0.7s linear infinite;
+    }
+    @keyframes giro { to { transform: rotate(360deg); } }
+
     .page {
       position: relative; z-index: 1;
       height: 100dvh;
@@ -38,242 +48,233 @@
       align-items: center; justify-content: center;
       padding: 2rem 1.5rem max(2rem, env(safe-area-inset-bottom));
       text-align: center;
-      gap: 0;
     }
 
-    .flor {
-      font-size: 2.4rem;
-      margin-bottom: 1.2rem;
-      opacity: 0;
-      animation: surgir 0.8s ease 0.1s forwards;
-    }
+    .flor  { font-size: 2.4rem; margin-bottom: 1.2rem; animation: surgir 0.8s ease 0.1s both; }
+    .nome  { font-family: var(--serif); font-size: clamp(3rem,10vw,5rem); font-weight: 400; letter-spacing: 0.06em; line-height: 1; margin-bottom: 0.5rem; animation: surgir 0.9s ease 0.2s both; }
+    .datas { font-size: 0.78rem; font-weight: 300; letter-spacing: 0.22em; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 1rem; animation: surgir 0.9s ease 0.35s both; }
+    .linha { width: 40px; height: 1px; background: var(--green); opacity: 0.7; margin: 0 auto 2rem; animation: surgir 0.9s ease 0.4s both; }
+    .pergunta { font-size: 0.88rem; font-weight: 300; color: rgba(255,255,255,0.45); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.6rem; animation: surgir 0.9s ease 0.5s both; }
 
-    .nome {
-      font-family: var(--serif);
-      font-size: clamp(3rem, 10vw, 5rem);
-      font-weight: 400; letter-spacing: 0.06em;
-      color: #fff; line-height: 1;
-      margin-bottom: 0.5rem;
-      opacity: 0;
-      animation: surgir 0.9s ease 0.2s forwards;
-    }
-
-    .datas {
-      font-size: 0.78rem; font-weight: 300;
-      letter-spacing: 0.22em; color: rgba(255,255,255,0.35);
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      opacity: 0;
-      animation: surgir 0.9s ease 0.35s forwards;
-    }
-
-    .linha {
-      width: 40px; height: 1px;
-      background: var(--green); opacity: 0.7;
-      margin: 0 auto 2rem;
-      animation: surgir 0.9s ease 0.4s forwards;
-      opacity: 0;
-    }
-
-    .pergunta {
-      font-size: 0.88rem; font-weight: 300;
-      color: rgba(255,255,255,0.45);
-      letter-spacing: 0.12em; text-transform: uppercase;
-      margin-bottom: 1.6rem;
-      opacity: 0;
-      animation: surgir 0.9s ease 0.5s forwards;
-    }
-
-    .cards {
-      display: flex; gap: 1rem;
-      justify-content: center; flex-wrap: wrap;
-      opacity: 0;
-      animation: surgir 1s ease 0.65s forwards;
-    }
-
+    .cards { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: surgir 1s ease 0.65s both; }
     .card {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 0.6rem;
-      width: 160px; min-height: 160px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
-      cursor: pointer;
-      transition: all 0.25s ease;
-      text-decoration: none;
-      color: #fff;
-      backdrop-filter: blur(6px);
-      padding: 1.5rem 1rem;
-      position: relative;
-      overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.6rem; width: 160px; min-height: 160px; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
+      cursor: pointer; transition: all 0.25s ease; color: #fff;
+      backdrop-filter: blur(6px); padding: 1.5rem 1rem; position: relative; overflow: hidden;
     }
-
     .card::before {
-      content: '';
-      position: absolute; inset: 0;
-      border-radius: 20px;
+      content: ''; position: absolute; inset: 0; border-radius: 20px;
       background: radial-gradient(ellipse at 50% 0%, rgba(37,211,102,0.12) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.25s;
+      opacity: 0; transition: opacity 0.25s;
     }
-
     .card:hover::before { opacity: 1; }
-    .card:hover {
-      border-color: rgba(37,211,102,0.4);
-      background: rgba(255,255,255,0.07);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(37,211,102,0.15);
-    }
+    .card:hover { border-color: rgba(37,211,102,0.4); background: rgba(255,255,255,0.07); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(37,211,102,0.15); }
     .card:active { transform: translateY(-1px) scale(0.98); }
-
     .card-emoji { font-size: 2.4rem; line-height: 1; }
     .card-nome  { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em; }
     .card-papel { font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
 
+    /* Cards do suporte (admin vê as duas opções após login) */
+    .cards.suporte-mode .card { pointer-events: all; }
+
     .rodape {
       position: absolute; bottom: max(1.5rem, env(safe-area-inset-bottom));
       left: 0; right: 0; text-align: center;
-      font-size: 0.72rem; color: rgba(255,255,255,0.18);
-      letter-spacing: 0.06em;
-      opacity: 0;
-      animation: surgir 1s ease 1s forwards;
+      font-size: 0.72rem; color: rgba(255,255,255,0.18); letter-spacing: 0.06em;
+      animation: surgir 1s ease 1s both;
     }
 
-    /* PIN overlay */
+    /* Overlay de senha */
     .pin-overlay {
       display: none; position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(12px);
       align-items: center; justify-content: center;
     }
     .pin-overlay.ativo { display: flex; }
     .pin-box {
       background: #12181f; border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 20px; padding: 2rem 2.5rem;
-      text-align: center; min-width: 260px;
+      border-radius: 20px; padding: 2rem 2.5rem; text-align: center; min-width: 280px; max-width: 90vw;
     }
-    .pin-titulo { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.4rem; }
-    .pin-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 1.4rem; }
+    .pin-titulo { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .pin-sub    { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 1.4rem; }
     .pin-input {
-      width: 100%; background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
-      color: #fff; font-size: 1.4rem; letter-spacing: 0.4em;
-      text-align: center; padding: 0.7rem 1rem;
-      font-family: var(--sans); outline: none;
-      transition: border-color 0.2s;
+      width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px; color: #fff; font-size: 1rem; padding: 0.75rem 1rem;
+      font-family: var(--sans); outline: none; transition: border-color 0.2s;
     }
     .pin-input:focus { border-color: var(--green); }
-    .pin-erro { font-size: 0.8rem; color: #ff6b6b; margin-top: 0.6rem; min-height: 1rem; }
+    .pin-erro { font-size: 0.8rem; color: #ff6b6b; margin-top: 0.6rem; min-height: 1.1rem; }
     .pin-btns { display: flex; gap: 0.6rem; margin-top: 1rem; }
-    .pin-btn {
-      flex: 1; padding: 0.7rem; border-radius: 10px; border: none;
-      font-size: 0.92rem; font-weight: 600; cursor: pointer;
-      font-family: var(--sans); transition: all 0.2s;
-    }
+    .pin-btn { flex: 1; padding: 0.75rem; border-radius: 10px; border: none; font-size: 0.92rem; font-weight: 600; cursor: pointer; font-family: var(--sans); transition: all 0.2s; }
     .pin-btn-ok { background: var(--green); color: #fff; }
-    .pin-btn-ok:hover { background: #1db954; }
+    .pin-btn-ok:hover:not(:disabled) { background: #1db954; }
+    .pin-btn-ok:disabled { opacity: 0.6; cursor: default; }
     .pin-btn-cancel { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
     .pin-btn-cancel:hover { background: rgba(255,255,255,0.14); }
+    .pin-primeiro {
+      margin-top: 1rem; font-size: 0.78rem; color: rgba(255,255,255,0.35);
+      cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+      background: none; border: none; font-family: var(--sans); width: 100%;
+    }
+    .pin-primeiro:hover { color: var(--green); }
+    .pin-ok-msg { font-size: 0.82rem; color: var(--green); margin-top: 0.8rem; }
 
     @keyframes surgir {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
-    /* Corrige opacidade inicial das animações encadeadas */
-    .linha { opacity: 0 !important; }
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="page">
-    <div class="flor">🌸</div>
-    <h1 class="nome">Glenda</h1>
-    <p class="datas">21 / 01 / 2004 — 30 / 07 / 2024</p>
-    <div class="linha"></div>
-    <p class="pergunta">Quem é você?</p>
-    <div class="cards">
-      <div class="card" onclick="abrirPin('mae')">
-        <span class="card-emoji">💚</span>
-        <span class="card-nome">Simone</span>
-        <span class="card-papel">Mãe</span>
-      </div>
-      <div class="card" onclick="abrirPin('pai')">
-        <span class="card-emoji">🐰</span>
-        <span class="card-nome">Marcos</span>
-        <span class="card-papel">Pai</span>
-      </div>
+
+<div id="loading"><div class="spin-sm"></div></div>
+
+<div class="bg"></div>
+<div class="page">
+  <div class="flor">🌸</div>
+  <h1 class="nome">Glenda</h1>
+  <p class="datas">21 / 01 / 2004 — 30 / 07 / 2024</p>
+  <div class="linha"></div>
+  <p class="pergunta" id="pergunta">Quem é você?</p>
+  <div class="cards" id="cards">
+    <div class="card" id="card-mae" onclick="escolher('mae')">
+      <span class="card-emoji">💚</span>
+      <span class="card-nome">Simone</span>
+      <span class="card-papel">Mãe</span>
+    </div>
+    <div class="card" id="card-pai" onclick="escolher('pai')">
+      <span class="card-emoji">🐰</span>
+      <span class="card-nome">Marcos</span>
+      <span class="card-papel">Pai</span>
     </div>
   </div>
+</div>
+<p class="rodape">Memorial Glenda &mdash; para sempre em nossos corações</p>
 
-  <!-- PIN overlay -->
-  <div class="pin-overlay" id="pin-overlay">
-    <div class="pin-box">
-      <div class="pin-titulo" id="pin-titulo">Simone</div>
-      <div class="pin-sub">Digite sua senha</div>
-      <input class="pin-input" id="pin-input" type="password" maxlength="20"
-             placeholder="••••" autocomplete="off"
-             onkeydown="if(event.key==='Enter')confirmarPin()">
-      <div class="pin-erro" id="pin-erro"></div>
-      <div class="pin-btns">
-        <button class="pin-btn pin-btn-cancel" onclick="fecharPin()">Cancelar</button>
-        <button class="pin-btn pin-btn-ok"     onclick="confirmarPin()">Entrar</button>
-      </div>
+<!-- Overlay de senha -->
+<div class="pin-overlay" id="pin-overlay">
+  <div class="pin-box">
+    <div class="pin-titulo" id="pin-titulo"></div>
+    <div class="pin-sub">Digite sua senha</div>
+    <input class="pin-input" id="pin-input" type="password" placeholder="senha"
+           autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')confirmarSenha()">
+    <div class="pin-erro" id="pin-erro"></div>
+    <div class="pin-btns">
+      <button class="pin-btn pin-btn-cancel" onclick="fecharPin()">Cancelar</button>
+      <button class="pin-btn pin-btn-ok" id="pin-btn-ok" onclick="confirmarSenha()">Entrar</button>
     </div>
+    <button class="pin-primeiro" onclick="primeiroAcesso()">Primeiro acesso? Defina sua senha</button>
+    <div class="pin-ok-msg" id="pin-ok-msg" style="display:none"></div>
   </div>
-  </div>
-  <p class="rodape">Memorial Glenda &mdash; para sempre em nossos corações</p>
+</div>
 
-  <script>
-    // Senhas com hash SHA-256 — para mudar, gere o hash em: https://emn178.github.io/online-tools/sha256.html
-    // e substitua os valores abaixo
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged }
+                                   from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 
-    async function sha256(msg) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
+const firebaseConfig = {
+  apiKey:            "AIzaSyCJBEvY1TQ2veZr_eNV-sIKwDdUIojouSw",
+  authDomain:        "memorial-glenda-a1c38.firebaseapp.com",
+  projectId:         "memorial-glenda-a1c38",
+  storageBucket:     "memorial-glenda-a1c38.firebasestorage.app",
+  messagingSenderId: "67971586664",
+  appId:             "1:67971586664:web:11804b7dd4ad2300a3f9dd"
+};
 
-    // Hashes SHA-256 das senhas (glenda2024 para ambos por padrão)
-    const SENHA_MAE = '6f67bb407548d8f36b6d22de280db4f1fa44e415c0e41dbe148c332a03df5eaa'; // glenda2024
-    const SENHA_PAI = '6f67bb407548d8f36b6d22de280db4f1fa44e415c0e41dbe148c332a03df5eaa'; // glenda2024
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    let _pinAlvo = null;
+// ── Mapeamento de emails → perfil ─────────────────────────────────
+const EMAILS = {
+  mae:     'MAE_EMAIL_AQUI',              // substituir quando Simone passar o email
+  pai:     'contato@agenciagm.com.br',
+  suporte: 'diegodisouza10@gmail.com'
+};
 
-    function abrirPin(quem) {
-      _pinAlvo = quem;
-      document.getElementById('pin-titulo').textContent = quem === 'mae' ? 'Simone' : 'Marcos';
-      document.getElementById('pin-input').value = '';
-      document.getElementById('pin-erro').textContent = '';
-      document.getElementById('pin-overlay').classList.add('ativo');
-      setTimeout(() => document.getElementById('pin-input').focus(), 100);
-    }
+function perfilDoEmail(email) {
+  if (email === EMAILS.mae)     return 'mae';
+  if (email === EMAILS.pai)     return 'pai';
+  if (email === EMAILS.suporte) return 'suporte';
+  return null;
+}
 
-    function fecharPin() {
-      document.getElementById('pin-overlay').classList.remove('ativo');
-      _pinAlvo = null;
-    }
+// ── Auth state ────────────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  document.getElementById('loading').style.display = 'none';
+  if (!user) return; // mostra tela de login normalmente
 
-    async function confirmarPin() {
-      const val = document.getElementById('pin-input').value;
-      if (!val) return;
-      const hash = await sha256(val);
-      const esperado = _pinAlvo === 'mae' ? SENHA_MAE : SENHA_PAI;
-      if (hash === esperado) {
-        try { localStorage.setItem('memorial_quem', _pinAlvo); } catch(e) {}
-        location.replace(_pinAlvo + '.html');
-      } else {
-        document.getElementById('pin-erro').textContent = 'Senha incorreta.';
-        document.getElementById('pin-input').value = '';
-        document.getElementById('pin-input').focus();
-      }
-    }
+  const perfil = perfilDoEmail(user.email);
+  if (perfil === 'mae')     { location.replace('mae.html'); return; }
+  if (perfil === 'pai')     { location.replace('pai.html'); return; }
+  if (perfil === 'suporte') {
+    // Suporte já autenticado: mostra os dois cards para escolher
+    document.getElementById('pergunta').textContent = 'Qual memorial deseja acessar?';
+    window._suporteLogado = true;
+    return;
+  }
+  // Email desconhecido
+  auth.signOut();
+});
 
-    // Se já está autenticado, redireciona direto
-    try {
-      const quem = localStorage.getItem('memorial_quem');
-      if (quem === 'mae') location.replace('mae.html');
-      else if (quem === 'pai') location.replace('pai.html');
-    } catch(e) {}
-  </script>
+// ── Login ─────────────────────────────────────────────────────────
+let _alvo = null;
+
+window.escolher = function(quem) {
+  // Suporte já logado: vai direto sem senha
+  if (window._suporteLogado) { location.href = quem + '.html'; return; }
+
+  _alvo = quem;
+  const nomes = { mae: 'Simone', pai: 'Marcos' };
+  document.getElementById('pin-titulo').textContent = nomes[quem] || quem;
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-erro').textContent = '';
+  document.getElementById('pin-overlay').classList.add('ativo');
+  setTimeout(() => document.getElementById('pin-input').focus(), 120);
+};
+
+window.fecharPin = function() {
+  document.getElementById('pin-overlay').classList.remove('ativo');
+  _alvo = null;
+};
+
+window.primeiroAcesso = async function() {
+  if (!_alvo) return;
+  const btn = document.getElementById('pin-btn-ok');
+  const msg = document.getElementById('pin-ok-msg');
+  btn.disabled = true;
+  msg.style.display = 'none';
+  try {
+    const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js');
+    await sendPasswordResetEmail(auth, EMAILS[_alvo]);
+    msg.style.display = '';
+    msg.textContent = '✓ Email enviado! Verifique sua caixa de entrada para definir sua senha.';
+    document.getElementById('pin-primeiro').style.display = 'none';
+  } catch(e) {
+    document.getElementById('pin-erro').textContent = 'Erro ao enviar email. Tente novamente.';
+  }
+  btn.disabled = false;
+};
+
+window.confirmarSenha = async function() {
+  const senha = document.getElementById('pin-input').value;
+  if (!senha || !_alvo) return;
+  const btn = document.getElementById('pin-btn-ok');
+  btn.textContent = '...'; btn.disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, EMAILS[_alvo], senha);
+    // onAuthStateChanged cuida do redirect
+  } catch(e) {
+    document.getElementById('pin-erro').textContent = 'Senha incorreta.';
+    document.getElementById('pin-input').value = '';
+    document.getElementById('pin-input').focus();
+    btn.textContent = 'Entrar'; btn.disabled = false;
+  }
+};
+</script>
+
 </body>
 </html>
