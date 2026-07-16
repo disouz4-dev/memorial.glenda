@@ -70,21 +70,20 @@
     .login-input:focus { border-color: var(--green); }
     .login-input::placeholder { color: rgba(255,255,255,0.3); }
     .login-erro { font-size: 0.8rem; color: #ff6b6b; min-height: 1.1rem; text-align: center; }
+    .login-btns { display: flex; gap: 0.6rem; }
     .login-btn {
-      width: 100%; padding: 0.9rem; border-radius: 12px; border: none;
+      flex: 1; padding: 0.9rem; border-radius: 12px; border: none;
       background: var(--green); color: #fff;
       font-size: 1rem; font-weight: 600; cursor: pointer;
       font-family: var(--sans); transition: all 0.2s; letter-spacing: 0.03em;
     }
-    .login-btn:hover:not(:disabled) { background: #1db954; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
+    .login-btn-sec {
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);
+    }
+    .login-btn-sec:hover:not(:disabled) { background: rgba(255,255,255,0.15); transform: translateY(-1px); box-shadow: none; }
+    .login-btn:not(.login-btn-sec):hover:not(:disabled) { background: #1db954; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
     .login-btn:active  { transform: translateY(0); }
     .login-btn:disabled { opacity: 0.6; cursor: default; }
-    .login-primeiro {
-      margin-top: 0.25rem; font-size: 0.78rem; color: rgba(255,255,255,0.35);
-      cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
-      background: none; border: none; font-family: var(--sans); width: 100%; text-align: center;
-    }
-    .login-primeiro:hover { color: var(--green); }
     .login-ok-msg { font-size: 0.82rem; color: var(--green); text-align: center; min-height: 1.1rem; }
 
     /* Cards do suporte (ocultos por padrão) */
@@ -140,10 +139,14 @@
     <input class="login-input" id="inp-email" type="email" placeholder="seu e-mail"
            autocomplete="email" onkeydown="if(event.key==='Enter')focarSenha()">
     <input class="login-input" id="inp-senha" type="password" placeholder="senha"
-           autocomplete="current-password" onkeydown="if(event.key==='Enter')fazerLogin()">
+           autocomplete="current-password" onkeydown="if(event.key==='Enter')acoeBotaoPrincipal()">
+    <input class="login-input" id="inp-confirma" type="password" placeholder="confirmar senha"
+           style="display:none" onkeydown="if(event.key==='Enter')criarConta()">
     <div class="login-erro" id="login-erro"></div>
-    <button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar</button>
-    <button class="login-primeiro" onclick="primeiroAcesso()">Primeiro acesso? Defina sua senha</button>
+    <div class="login-btns">
+      <button class="login-btn login-btn-sec" id="btn-criar" onclick="alternarModo()">Criar conta</button>
+      <button class="login-btn" id="login-btn" onclick="acoeBotaoPrincipal()">Entrar</button>
+    </div>
     <div class="login-ok-msg" id="login-ok-msg"></div>
   </div>
 
@@ -168,9 +171,9 @@
 <p class="rodape">Memorial Glenda &mdash; para sempre em nossos corações</p>
 
 <script type="module">
-import { initializeApp }           from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged }
-                                   from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCs3xecW_D39KkmyEr5GpcSX0O5SAjXME8",
@@ -184,16 +187,16 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const EMAILS = {
-  mae:     'MAE_EMAIL_AQUI',
-  pai:     'contato@agenciagm.com.br',
-  suporte: 'diegodisouza10@gmail.com'
-};
+const EMAILS_PERMITIDOS = [
+  'MAE_EMAIL_AQUI',
+  'contato@agenciagm.com.br',
+  'diegodisouza10@gmail.com'
+];
 
 function perfilDoEmail(email) {
-  if (email === EMAILS.mae)     return 'mae';
-  if (email === EMAILS.pai)     return 'pai';
-  if (email === EMAILS.suporte) return 'suporte';
+  if (email === 'MAE_EMAIL_AQUI')           return 'mae';
+  if (email === 'contato@agenciagm.com.br') return 'pai';
+  if (email === 'diegodisouza10@gmail.com') return 'suporte';
   return null;
 }
 
@@ -212,10 +215,40 @@ onAuthStateChanged(auth, user => {
   auth.signOut();
 });
 
+// ── Alternância login / criar conta ───────────────────────────────
+let _modoCriar = false;
+
 window.focarSenha = function() {
   document.getElementById('inp-senha').focus();
 };
 
+window.alternarModo = function() {
+  _modoCriar = !_modoCriar;
+  const confirma   = document.getElementById('inp-confirma');
+  const btnPrinc   = document.getElementById('login-btn');
+  const btnSec     = document.getElementById('btn-criar');
+  const erro       = document.getElementById('login-erro');
+  const ok         = document.getElementById('login-ok-msg');
+  erro.textContent = ''; ok.textContent = '';
+
+  if (_modoCriar) {
+    confirma.style.display = '';
+    btnPrinc.textContent = 'Criar conta';
+    btnSec.textContent   = 'Já tenho conta';
+    setTimeout(() => confirma.focus(), 80);
+  } else {
+    confirma.style.display = 'none';
+    confirma.value = '';
+    btnPrinc.textContent = 'Entrar';
+    btnSec.textContent   = 'Criar conta';
+  }
+};
+
+window.acoeBotaoPrincipal = function() {
+  _modoCriar ? criarConta() : fazerLogin();
+};
+
+// ── Login ─────────────────────────────────────────────────────────
 window.fazerLogin = async function() {
   const email = document.getElementById('inp-email').value.trim();
   const senha = document.getElementById('inp-senha').value;
@@ -229,30 +262,44 @@ window.fazerLogin = async function() {
 
   try {
     await signInWithEmailAndPassword(auth, email, senha);
-    // onAuthStateChanged redireciona
   } catch(e) {
-    const msg = e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found'
+    erro.textContent = (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found')
       ? 'E-mail ou senha incorretos.'
       : 'Erro ao entrar. Tente novamente.';
-    erro.textContent = msg;
     btn.textContent = 'Entrar'; btn.disabled = false;
   }
 };
 
-window.primeiroAcesso = async function() {
-  const email = document.getElementById('inp-email').value.trim();
-  const erro  = document.getElementById('login-erro');
-  const ok    = document.getElementById('login-ok-msg');
-
-  if (!email) { erro.textContent = 'Digite seu e-mail antes.'; return; }
+// ── Criar conta ───────────────────────────────────────────────────
+window.criarConta = async function() {
+  const email    = document.getElementById('inp-email').value.trim();
+  const senha    = document.getElementById('inp-senha').value;
+  const confirma = document.getElementById('inp-confirma').value;
+  const btn      = document.getElementById('login-btn');
+  const erro     = document.getElementById('login-erro');
+  const ok       = document.getElementById('login-ok-msg');
 
   erro.textContent = ''; ok.textContent = '';
 
+  if (!email || !senha) { erro.textContent = 'Preencha e-mail e senha.'; return; }
+  if (senha !== confirma) { erro.textContent = 'As senhas não coincidem.'; return; }
+  if (senha.length < 6)  { erro.textContent = 'A senha deve ter pelo menos 6 caracteres.'; return; }
+  if (!EMAILS_PERMITIDOS.includes(email)) {
+    erro.textContent = 'Este e-mail não está autorizado.'; return;
+  }
+
+  btn.textContent = '...'; btn.disabled = true;
+
   try {
-    await sendPasswordResetEmail(auth, email);
-    ok.textContent = '✓ Email enviado! Verifique sua caixa de entrada.';
+    await createUserWithEmailAndPassword(auth, email, senha);
+    // onAuthStateChanged cuida do redirecionamento
   } catch(e) {
-    erro.textContent = 'Não foi possível enviar o email. Verifique o endereço.';
+    if (e.code === 'auth/email-already-in-use') {
+      erro.textContent = 'Este e-mail já possui cadastro. Use "Entrar".';
+    } else {
+      erro.textContent = 'Erro ao criar conta. Tente novamente.';
+    }
+    btn.textContent = 'Criar conta'; btn.disabled = false;
   }
 };
 </script>
