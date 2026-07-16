@@ -782,7 +782,7 @@ function initChat() {
         bubble.innerHTML = `<div class="media-overlay"><img src="${mediaPath('fotos', msg.filename)}" alt="foto" loading="lazy" onerror="this.style.display='none'" onclick="openLightbox('${mediaPath('fotos', msg.filename)}','image')"></div><span class="msg-time">${msg.time}</span>`;
         break;
       case 'video': {
-        const vp = mediaPath('videos', msg.filename);
+        const vp = mediaPath('videos-pai', msg.filename);
         bubble.classList.add('media-bubble');
         bubble.innerHTML = `<div class="video-bubble" onclick="openLightbox('${vp}','video')"><video src="${vp}" preload="none"></video><div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></div></div><span class="msg-time">${msg.time}</span>`;
         break;
@@ -1104,12 +1104,12 @@ import { getAuth, onAuthStateChanged, signOut }
                                 from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyCJBEvY1TQ2veZr_eNV-sIKwDdUIojouSw",
-  authDomain:        "memorial-glenda-a1c38.firebaseapp.com",
-  projectId:         "memorial-glenda-a1c38",
-  storageBucket:     "memorial-glenda-a1c38.firebasestorage.app",
-  messagingSenderId: "67971586664",
-  appId:             "1:67971586664:web:11804b7dd4ad2300a3f9dd"
+  apiKey:            "AIzaSyCs3xecW_D39KkmyEr5GpcSX0O5SAjXME8",
+  authDomain:        "memorialglenda08.firebaseapp.com",
+  projectId:         "memorialglenda08",
+  storageBucket:     "memorialglenda08.firebasestorage.app",
+  messagingSenderId: "656108355499",
+  appId:             "1:656108355499:web:11804b7dd4ad2300a3f9dd"
 };
 
 const EMAILS_PERMITIDOS = [
