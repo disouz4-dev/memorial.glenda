@@ -140,6 +140,41 @@
       animation: surgir 1s ease 1s forwards;
     }
 
+    /* PIN overlay */
+    .pin-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+      align-items: center; justify-content: center;
+    }
+    .pin-overlay.ativo { display: flex; }
+    .pin-box {
+      background: #12181f; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 2rem 2.5rem;
+      text-align: center; min-width: 260px;
+    }
+    .pin-titulo { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .pin-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 1.4rem; }
+    .pin-input {
+      width: 100%; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
+      color: #fff; font-size: 1.4rem; letter-spacing: 0.4em;
+      text-align: center; padding: 0.7rem 1rem;
+      font-family: var(--sans); outline: none;
+      transition: border-color 0.2s;
+    }
+    .pin-input:focus { border-color: var(--green); }
+    .pin-erro { font-size: 0.8rem; color: #ff6b6b; margin-top: 0.6rem; min-height: 1rem; }
+    .pin-btns { display: flex; gap: 0.6rem; margin-top: 1rem; }
+    .pin-btn {
+      flex: 1; padding: 0.7rem; border-radius: 10px; border: none;
+      font-size: 0.92rem; font-weight: 600; cursor: pointer;
+      font-family: var(--sans); transition: all 0.2s;
+    }
+    .pin-btn-ok { background: var(--green); color: #fff; }
+    .pin-btn-ok:hover { background: #1db954; }
+    .pin-btn-cancel { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+    .pin-btn-cancel:hover { background: rgba(255,255,255,0.14); }
+
     @keyframes surgir {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -158,25 +193,82 @@
     <div class="linha"></div>
     <p class="pergunta">Quem é você?</p>
     <div class="cards">
-      <a href="mae.html" class="card" onclick="lembrar('mae')">
+      <div class="card" onclick="abrirPin('mae')">
         <span class="card-emoji">💚</span>
         <span class="card-nome">Simone</span>
         <span class="card-papel">Mãe</span>
-      </a>
-      <a href="pai.html" class="card" onclick="lembrar('pai')">
+      </div>
+      <div class="card" onclick="abrirPin('pai')">
         <span class="card-emoji">🐰</span>
         <span class="card-nome">Marcos</span>
         <span class="card-papel">Pai</span>
-      </a>
+      </div>
     </div>
+  </div>
+
+  <!-- PIN overlay -->
+  <div class="pin-overlay" id="pin-overlay">
+    <div class="pin-box">
+      <div class="pin-titulo" id="pin-titulo">Simone</div>
+      <div class="pin-sub">Digite sua senha</div>
+      <input class="pin-input" id="pin-input" type="password" maxlength="20"
+             placeholder="••••" autocomplete="off"
+             onkeydown="if(event.key==='Enter')confirmarPin()">
+      <div class="pin-erro" id="pin-erro"></div>
+      <div class="pin-btns">
+        <button class="pin-btn pin-btn-cancel" onclick="fecharPin()">Cancelar</button>
+        <button class="pin-btn pin-btn-ok"     onclick="confirmarPin()">Entrar</button>
+      </div>
+    </div>
+  </div>
   </div>
   <p class="rodape">Memorial Glenda &mdash; para sempre em nossos corações</p>
 
   <script>
-    function lembrar(quem) {
-      try { localStorage.setItem('memorial_quem', quem); } catch(e) {}
+    // Senhas com hash SHA-256 — para mudar, gere o hash em: https://emn178.github.io/online-tools/sha256.html
+    // e substitua os valores abaixo
+
+    async function sha256(msg) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
-    // Se já escolheu, redireciona direto
+
+    // Hashes SHA-256 das senhas (glenda2024 para ambos por padrão)
+    const SENHA_MAE = '6f67bb407548d8f36b6d22de280db4f1fa44e415c0e41dbe148c332a03df5eaa'; // glenda2024
+    const SENHA_PAI = '6f67bb407548d8f36b6d22de280db4f1fa44e415c0e41dbe148c332a03df5eaa'; // glenda2024
+
+    let _pinAlvo = null;
+
+    function abrirPin(quem) {
+      _pinAlvo = quem;
+      document.getElementById('pin-titulo').textContent = quem === 'mae' ? 'Simone' : 'Marcos';
+      document.getElementById('pin-input').value = '';
+      document.getElementById('pin-erro').textContent = '';
+      document.getElementById('pin-overlay').classList.add('ativo');
+      setTimeout(() => document.getElementById('pin-input').focus(), 100);
+    }
+
+    function fecharPin() {
+      document.getElementById('pin-overlay').classList.remove('ativo');
+      _pinAlvo = null;
+    }
+
+    async function confirmarPin() {
+      const val = document.getElementById('pin-input').value;
+      if (!val) return;
+      const hash = await sha256(val);
+      const esperado = _pinAlvo === 'mae' ? SENHA_MAE : SENHA_PAI;
+      if (hash === esperado) {
+        try { localStorage.setItem('memorial_quem', _pinAlvo); } catch(e) {}
+        location.replace(_pinAlvo + '.html');
+      } else {
+        document.getElementById('pin-erro').textContent = 'Senha incorreta.';
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+      }
+    }
+
+    // Se já está autenticado, redireciona direto
     try {
       const quem = localStorage.getItem('memorial_quem');
       if (quem === 'mae') location.replace('mae.html');

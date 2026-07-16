@@ -115,6 +115,17 @@
     .stat-n { display: block; font-size: 1.4rem; font-weight: 600; color: var(--green); line-height: 1; }
     .stat-l { font-size: 0.7rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.5px; }
 
+    .logout-btn {
+      position: fixed; top: 1rem; right: 1rem; z-index: 100;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.45); border-radius: 50%;
+      width: 36px; height: 36px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; backdrop-filter: blur(6px);
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.14); color: #fff; border-color: rgba(255,255,255,0.3); }
+    .logout-btn svg { width: 18px; height: 18px; }
+
     /* ════════════════════════════════════════════════
        CHAT
     ════════════════════════════════════════════════ */
@@ -434,6 +445,10 @@
 <!-- ═══════════════════════════════════════════════
      VIEW: HOME
 ══════════════════════════════════════════════════ -->
+<button class="logout-btn" title="Trocar usuário" onclick="logout()">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+</button>
+
 <div id="v-home" class="view ativa">
   <div class="bg" id="bg"></div>
   <div class="page">
@@ -920,8 +935,8 @@ function initGaleria() {
   galeriaIniciado = true;
 
   const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const BF = 'assets/media/fotos/';
-  const BV = 'assets/media/videos/';
+  const BF = 'assets/media/fotos-pai/';
+  const BV = 'assets/media/videos-pai/';
 
   let todos = [], exibidos = [], lbI = 0, tiraOk = false, curTipo = 'image';
 
@@ -1080,6 +1095,13 @@ function initGaleria() {
     const dx = e.changedTouches[0].clientX - sx;
     if (Math.abs(dx) > 50) nav(dx < 0 ? 1 : -1);
   });
+}
+</script>
+
+<script>
+function logout() {
+  try { localStorage.removeItem('memorial_quem'); } catch(e) {}
+  location.href = 'index.html';
 }
 </script>
 
