@@ -360,10 +360,12 @@ window.playerDuck = function(duck) {
 // ── Init ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
-  if (shuffleOn && shuffleOrder.length === 0) buildShuffle(0);
+  if (shuffleOn && shuffleOrder.length === 0) {
+    buildShuffle(Math.floor(Math.random() * PLAYLIST.length));
+  }
   injectPlayer();
 
-  const startIdx = shuffleOn ? shuffleOrder[0] : currentIdx;
+  const startIdx = shuffleOn ? shuffleOrder[shufflePos] : currentIdx;
   loadTrack(startIdx, false);
   audio.volume = 0.7;
 

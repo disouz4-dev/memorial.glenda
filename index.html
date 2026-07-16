@@ -77,6 +77,13 @@
     .login-btn:hover:not(:disabled) { background: #1db954; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
     .login-btn:active { transform: translateY(0); }
     .login-btn:disabled { opacity: 0.6; cursor: default; }
+    .login-link {
+      background: none; border: none; color: rgba(255,255,255,0.35);
+      font-size: 0.78rem; font-family: var(--sans); cursor: pointer;
+      text-decoration: underline; text-underline-offset: 3px; width: 100%; text-align: center;
+      padding: 0.2rem 0;
+    }
+    .login-link:hover { color: var(--green); }
 
     /* Cards do suporte */
     #suporte-view { display: none; width: 100%; max-width: 400px; }
@@ -153,6 +160,8 @@
            autocomplete="current-password" onkeydown="if(event.key==='Enter')fazerLogin()">
     <div class="login-erro" id="login-erro"></div>
     <button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar</button>
+    <button class="login-link" onclick="recuperarSenha()">Esqueci minha senha</button>
+    <div class="login-ok-msg" id="login-ok-msg"></div>
   </div>
 
   <!-- Cards do suporte -->
@@ -195,7 +204,7 @@
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, updatePassword, onAuthStateChanged }
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, updatePassword, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 
 const firebaseConfig = {
@@ -265,6 +274,22 @@ window.fazerLogin = async function() {
       ? 'E-mail ou senha incorretos.'
       : 'Erro ao entrar. Tente novamente.';
     btn.textContent = 'Entrar'; btn.disabled = false;
+  }
+};
+
+window.recuperarSenha = async function() {
+  const email = document.getElementById('inp-email').value.trim();
+  const erro  = document.getElementById('login-erro');
+  const ok    = document.getElementById('login-ok-msg');
+
+  erro.textContent = ''; ok.textContent = '';
+  if (!email) { erro.textContent = 'Digite seu e-mail primeiro.'; return; }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    ok.textContent = '✓ Email de recuperação enviado! Verifique sua caixa de entrada.';
+  } catch(e) {
+    erro.textContent = 'Não foi possível enviar. Verifique o e-mail digitado.';
   }
 };
 

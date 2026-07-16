@@ -1,0 +1,31 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "*.py",
+      "*.sh",
+      ".git",
+      ".gitignore"
+    ],
+    "headers": [
+      {
+        "source": "assets/media/audio/**",
+        "headers": [{ "key": "Content-Type", "value": "audio/ogg" }]
+      },
+      {
+        "source": "assets/media/audio-pai/**",
+        "headers": [{ "key": "Content-Type", "value": "audio/ogg" }]
+      },
+      {
+        "source": "assets/media/videos-pai/**",
+        "headers": [{ "key": "Content-Type", "value": "video/mp4" }]
+      },
+      {
+        "source": "assets/media/apresentacoes/**",
+        "headers": [{ "key": "Content-Type", "value": "video/mp4" }]
+      }
+    ]
+  }
+}

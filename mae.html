@@ -61,9 +61,9 @@
       position: relative; z-index: 1;
       min-height: 100dvh;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-end;
-      padding: 0 1.5rem max(160px, calc(130px + env(safe-area-inset-bottom)));
-      text-align: center; padding-top: 60px;
+      align-items: center; justify-content: space-between;
+      padding: max(3.5rem, calc(2.5rem + env(safe-area-inset-top))) 1.5rem max(160px, calc(130px + env(safe-area-inset-bottom)));
+      text-align: center;
     }
 
     .nome {
@@ -115,16 +115,93 @@
     .stat-n { display: block; font-size: 1.4rem; font-weight: 600; color: var(--green); line-height: 1; }
     .stat-l { font-size: 0.7rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.5px; }
 
-    .logout-btn {
-      position: fixed; top: 1rem; right: 1rem; z-index: 100;
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.45); border-radius: 50%;
-      width: 36px; height: 36px; cursor: pointer;
+    /* Botão de configurações (dentro da home) */
+    .home-cfg-btn {
+      position: absolute; top: max(1rem, env(safe-area-inset-top)); right: 1rem; z-index: 10;
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.6); border-radius: 50%;
+      width: 38px; height: 38px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s; backdrop-filter: blur(6px);
+      transition: all 0.2s; backdrop-filter: blur(8px);
     }
-    .logout-btn:hover { background: rgba(255,255,255,0.14); color: #fff; border-color: rgba(255,255,255,0.3); }
-    .logout-btn svg { width: 18px; height: 18px; }
+    .home-cfg-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .home-cfg-btn svg { width: 19px; height: 19px; }
+
+    /* Settings overlay */
+    .cfg-overlay {
+      display: none; position: fixed; inset: 0; z-index: 400;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(16px);
+      align-items: flex-end; justify-content: center;
+    }
+    .cfg-overlay.ativo { display: flex; }
+    .cfg-box {
+      background: #141b24; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px 20px 0 0;
+      padding: 1.5rem 1.5rem max(1.5rem, env(safe-area-inset-bottom));
+      width: 100%; max-width: 420px; animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .cfg-titulo { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 1.4rem; display: flex; justify-content: space-between; align-items: center; }
+    .cfg-fechar { background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 1.3rem; padding: 0; line-height: 1; }
+    .cfg-label  { font-size: 0.72rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.6rem; }
+    .cfg-input  { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: #fff; font-size: 0.95rem; padding: 0.7rem 0.9rem; font-family: var(--sans); outline: none; margin-bottom: 0.5rem; transition: border-color 0.2s; }
+    .cfg-input:focus { border-color: var(--green); }
+    .cfg-erro { font-size: 0.78rem; color: #ff6b6b; min-height: 1rem; }
+    .cfg-ok   { font-size: 0.78rem; color: var(--green); min-height: 1rem; }
+    .cfg-btn  { width: 100%; padding: 0.75rem; border-radius: 10px; border: none; font-size: 0.92rem; font-weight: 600; cursor: pointer; font-family: var(--sans); transition: all 0.2s; margin-top: 0.4rem; }
+    .cfg-btn-salvar { background: var(--green); color: #fff; }
+    .cfg-btn-salvar:hover:not(:disabled) { background: #1db954; }
+    .cfg-btn-salvar:disabled { opacity: 0.6; cursor: default; }
+    .cfg-btn-sair { background: rgba(255,80,80,0.12); color: #ff8080; border: 1px solid rgba(255,80,80,0.25); margin-top: 1rem; }
+    .cfg-btn-sair:hover { background: rgba(255,80,80,0.22); }
+    .cfg-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 1rem 0; }
+
+    /* Apresentações */
+    #v-apresentacoes.ativa { display: flex; flex-direction: column; background: #08080f; color: #fff; }
+    .ap-hdr {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.8rem 1rem;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+    }
+    .ap-hdr-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      font-size: 0.9rem; font-family: var(--sans);
+    }
+    .ap-hdr-back:hover { color: #fff; }
+    .ap-hdr-back svg { width: 20px; height: 20px; }
+    .ap-hdr-titulo { font-family: var(--serif); font-size: 1.05rem; }
+    .ap-hdr-sub    { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+    .ap-scroll { flex: 1; overflow-y: auto; padding: 1.5rem 1rem 2rem; }
+    .ap-scroll::-webkit-scrollbar { display: none; }
+    .ap-hero { text-align: center; padding: 0.5rem 0 2rem; }
+    .ap-hero-emoji { font-size: 2.8rem; }
+    .ap-hero-titulo { font-family: var(--serif); font-size: 1.7rem; margin: 0.5rem 0 0.4rem; }
+    .ap-hero-sub { font-size: 0.83rem; color: rgba(255,255,255,0.45); line-height: 1.6; }
+    .ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; }
+    .ap-card { aspect-ratio: 9/16; border-radius: 14px; overflow: hidden; background: #131320; cursor: pointer; position: relative; border: 1px solid rgba(255,255,255,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+    .ap-card:hover { transform: scale(1.03); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    .ap-card video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ap-card-grad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 45%); }
+    .ap-card-num { position: absolute; bottom: 0.6rem; left: 0.7rem; font-size: 0.75rem; color: rgba(255,255,255,0.6); font-weight: 600; }
+    .ap-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.18); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .ap-card:hover .ap-play { background: rgba(255,255,255,0.28); }
+    .ap-play svg { width: 22px; height: 22px; fill: #fff; margin-left: 3px; }
+
+    /* Lightbox de apresentações */
+    #ap-lb { display: none; position: fixed; inset: 0; z-index: 350; background: #000; flex-direction: column; }
+    #ap-lb.ativo { display: flex; }
+    .ap-lb-topo { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(12px); flex-shrink: 0; }
+    .ap-lb-fechar { background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 0.9rem; font-family: var(--sans); display: flex; align-items: center; gap: 0.3rem; padding: 0.3rem; }
+    .ap-lb-fechar:hover { color: #fff; }
+    .ap-lb-num { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+    .ap-lb-corpo { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+    #ap-lb-video { max-width: 100%; max-height: 100%; object-fit: contain; outline: none; }
+    .ap-lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: none; color: #fff; width: 40px; height: 64px; cursor: pointer; border-radius: 6px; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .ap-lb-nav:hover { background: rgba(255,255,255,0.2); }
+    .ap-lb-prev { left: 0.5rem; }
+    .ap-lb-next { right: 0.5rem; }
 
     /* ════════════════════════════════════════════════
        CHAT
@@ -445,12 +522,11 @@
 <!-- ═══════════════════════════════════════════════
      VIEW: HOME
 ══════════════════════════════════════════════════ -->
-<button class="logout-btn" title="Trocar usuário" onclick="logout()">
-  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
-</button>
-
 <div id="v-home" class="view ativa">
   <div class="bg" id="bg"></div>
+  <button class="home-cfg-btn" title="Configurações" onclick="abrirCfg()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.01 7.01 0 0 0-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.47.47 0 0 0-.59.22L2.74 8.87a.47.47 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.37 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.47.47 0 0 0-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+  </button>
   <div class="page">
     <h1 class="nome">Glenda</h1>
     <p class="subtitulo">Para sempre em nossos corações</p>
@@ -466,7 +542,11 @@
       </a>
       <a href="#galeria" class="btn-home btn-ghost">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-        Galeria de Fotos
+        Galeria
+      </a>
+      <a href="#apresentacoes" class="btn-home btn-ghost">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+        Ela Cantava
       </a>
     </div>
     <div class="stats">
@@ -578,6 +658,65 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════
+     VIEW: APRESENTAÇÕES
+══════════════════════════════════════════════════ -->
+<div id="v-apresentacoes" class="view">
+  <div class="ap-hdr">
+    <a href="#home" class="ap-hdr-back">
+      <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="7,1 1,7 7,13"/></svg>
+      Início
+    </a>
+    <div style="flex:1;margin-left:0.5rem">
+      <div class="ap-hdr-titulo">Ela cantava 🎵</div>
+      <div class="ap-hdr-sub">14 apresentações</div>
+    </div>
+  </div>
+  <div class="ap-scroll">
+    <div class="ap-hero">
+      <div class="ap-hero-emoji">🎵</div>
+      <h2 class="ap-hero-titulo">Ela cantava</h2>
+      <p class="ap-hero-sub">Uma voz que vai viver para sempre</p>
+    </div>
+    <div class="ap-grid" id="ap-grid"></div>
+  </div>
+</div>
+
+<!-- Settings overlay -->
+<div class="cfg-overlay" id="cfg-overlay" onclick="if(event.target===this)fecharCfg()">
+  <div class="cfg-box">
+    <div class="cfg-titulo">
+      Configurações
+      <button class="cfg-fechar" onclick="fecharCfg()">✕</button>
+    </div>
+    <div class="cfg-label">Trocar senha</div>
+    <input class="cfg-input" id="cfg-nova" type="password" placeholder="nova senha" autocomplete="new-password">
+    <input class="cfg-input" id="cfg-conf" type="password" placeholder="confirmar nova senha" autocomplete="new-password">
+    <div class="cfg-erro" id="cfg-erro"></div>
+    <div class="cfg-ok"   id="cfg-ok"></div>
+    <button class="cfg-btn cfg-btn-salvar" id="cfg-btn-salvar" onclick="trocarSenha()">Salvar senha</button>
+    <div class="cfg-divider"></div>
+    <button class="cfg-btn cfg-btn-sair" onclick="logout()">Sair</button>
+  </div>
+</div>
+
+<!-- Lightbox de apresentações -->
+<div id="ap-lb">
+  <div class="ap-lb-topo">
+    <button class="ap-lb-fechar" onclick="fecharApLb()">
+      <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="7,1 1,7 7,13"/></svg>
+      Voltar
+    </button>
+    <div class="ap-lb-num" id="ap-lb-num"></div>
+    <div style="width:60px"></div>
+  </div>
+  <div class="ap-lb-corpo">
+    <video id="ap-lb-video" controls playsinline></video>
+    <button class="ap-lb-nav ap-lb-prev" onclick="navApLb(-1)">‹</button>
+    <button class="ap-lb-nav ap-lb-next" onclick="navApLb(1)">›</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
      PLAYER (persistente entre views)
 ══════════════════════════════════════════════════ -->
 <script src="assets/js/player.js"></script>
@@ -587,17 +726,80 @@
 ══════════════════════════════════════════════════ -->
 <script>
 'use strict';
-let chatIniciado    = false;
-let galeriaIniciado = false;
+let chatIniciado           = false;
+let galeriaIniciado        = false;
+let apresentacoesIniciado  = false;
 
 function navegar(id) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('ativa'));
   const alvo = document.getElementById('v-' + id) || document.getElementById('v-home');
   alvo.classList.add('ativa');
 
-  if (id === 'chat'    && !chatIniciado)    initChat();
-  if (id === 'galeria' && !galeriaIniciado) initGaleria();
+  if (id === 'chat'          && !chatIniciado)          initChat();
+  if (id === 'galeria'       && !galeriaIniciado)       initGaleria();
+  if (id === 'apresentacoes' && !apresentacoesIniciado) initApresentacoes();
 }
+
+// ── Configurações (troca de senha) ────────────────────────────────
+window.abrirCfg = function() {
+  document.getElementById('cfg-nova').value = '';
+  document.getElementById('cfg-conf').value = '';
+  document.getElementById('cfg-erro').textContent = '';
+  document.getElementById('cfg-ok').textContent   = '';
+  document.getElementById('cfg-overlay').classList.add('ativo');
+  setTimeout(() => document.getElementById('cfg-nova').focus(), 120);
+};
+window.fecharCfg = function() {
+  document.getElementById('cfg-overlay').classList.remove('ativo');
+};
+
+// ── Apresentações ─────────────────────────────────────────────────
+const AP_TOTAL = 14;
+const AP_BASE  = 'assets/media/apresentacoes/';
+let apIdx = 0;
+
+function initApresentacoes() {
+  apresentacoesIniciado = true;
+  const grid = document.getElementById('ap-grid');
+  grid.innerHTML = '';
+  for (let i = 1; i <= AP_TOTAL; i++) {
+    const src  = `${AP_BASE}apresentacao_${String(i).padStart(2,'0')}.mp4`;
+    const card = document.createElement('div');
+    card.className = 'ap-card';
+    card.onclick = () => abrirApLb(i - 1);
+    card.innerHTML = `
+      <video src="${src}" preload="metadata" muted playsinline></video>
+      <div class="ap-card-grad"></div>
+      <span class="ap-card-num">${String(i).padStart(2,'0')}</span>
+      <div class="ap-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>`;
+    grid.appendChild(card);
+  }
+}
+
+window.abrirApLb = function(i) {
+  apIdx = i;
+  const src = `${AP_BASE}apresentacao_${String(apIdx+1).padStart(2,'0')}.mp4`;
+  const v   = document.getElementById('ap-lb-video');
+  v.src = src; v.play();
+  document.getElementById('ap-lb-num').textContent = `${apIdx+1} / ${AP_TOTAL}`;
+  document.getElementById('ap-lb').classList.add('ativo');
+  if (window.playerDuck) window.playerDuck(true);
+};
+
+window.fecharApLb = function() {
+  const v = document.getElementById('ap-lb-video');
+  v.pause(); v.src = '';
+  document.getElementById('ap-lb').classList.remove('ativo');
+  if (window.playerDuck) window.playerDuck(false);
+};
+
+window.navApLb = function(dir) {
+  apIdx = (apIdx + dir + AP_TOTAL) % AP_TOTAL;
+  const src = `${AP_BASE}apresentacao_${String(apIdx+1).padStart(2,'0')}.mp4`;
+  const v   = document.getElementById('ap-lb-video');
+  v.src = src; v.play();
+  document.getElementById('ap-lb-num').textContent = `${apIdx+1} / ${AP_TOTAL}`;
+};
 
 window.addEventListener('hashchange', () => {
   const id = location.hash.replace('#', '') || 'home';
@@ -1100,16 +1302,16 @@ function initGaleria() {
 
 <script type="module">
 import { initializeApp }        from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js';
-import { getAuth, onAuthStateChanged, signOut }
+import { getAuth, onAuthStateChanged, signOut, updatePassword }
                                 from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyCJBEvY1TQ2veZr_eNV-sIKwDdUIojouSw",
-  authDomain:        "memorial-glenda-a1c38.firebaseapp.com",
-  projectId:         "memorial-glenda-a1c38",
-  storageBucket:     "memorial-glenda-a1c38.firebasestorage.app",
-  messagingSenderId: "67971586664",
-  appId:             "1:67971586664:web:11804b7dd4ad2300a3f9dd"
+  apiKey:            "AIzaSyCs3xecW_D39KkmyEr5GpcSX0O5SAjXME8",
+  authDomain:        "memorialglenda08.firebaseapp.com",
+  projectId:         "memorialglenda08",
+  storageBucket:     "memorialglenda08.firebasestorage.app",
+  messagingSenderId: "656108355499",
+  appId:             "1:656108355499:web:11804b7dd4ad2300a3f9dd"
 };
 
 const EMAILS_PERMITIDOS = [
@@ -1127,6 +1329,30 @@ onAuthStateChanged(auth, user => {
 });
 
 window._fbSignOut = async () => { await signOut(auth); };
+
+window.trocarSenha = async function() {
+  const nova = document.getElementById('cfg-nova').value;
+  const conf = document.getElementById('cfg-conf').value;
+  const btn  = document.getElementById('cfg-btn-salvar');
+  const erro = document.getElementById('cfg-erro');
+  const ok   = document.getElementById('cfg-ok');
+  erro.textContent = ''; ok.textContent = '';
+  if (!nova)           { erro.textContent = 'Digite a nova senha.'; return; }
+  if (nova.length < 6) { erro.textContent = 'Mínimo de 6 caracteres.'; return; }
+  if (nova !== conf)   { erro.textContent = 'As senhas não coincidem.'; return; }
+  btn.textContent = '...'; btn.disabled = true;
+  try {
+    await updatePassword(auth.currentUser, nova);
+    localStorage.setItem('memorial_pwset_' + auth.currentUser.uid, '1');
+    ok.textContent = '✓ Senha alterada!';
+    setTimeout(() => fecharCfg(), 1500);
+  } catch(e) {
+    erro.textContent = e.code === 'auth/requires-recent-login'
+      ? 'Faça login novamente para trocar a senha.'
+      : 'Erro ao salvar. Tente novamente.';
+  }
+  btn.textContent = 'Salvar senha'; btn.disabled = false;
+};
 </script>
 
 <script>
